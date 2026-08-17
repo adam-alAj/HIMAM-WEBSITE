@@ -4,6 +4,7 @@ import About from './pages/About'
 import Accomplishments from './pages/Accomplishments'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import Contact from './pages/Contact'
 import Faq from './pages/Faq'
 import Home from './pages/Home'
 import PagePlaceholder from './pages/PagePlaceholder'
@@ -31,6 +32,7 @@ function App() {
           <Route path="/faq" element={<Faq />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="*" element={<PagePlaceholder />} />
         </Route>

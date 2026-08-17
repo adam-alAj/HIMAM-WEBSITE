@@ -76,6 +76,13 @@
       "mappedBy": "service",
       "description": "Client quotes about this service (inverse of testimonial.service)."
     },
+    "contactSubmissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contact-submission.contact-submission",
+      "mappedBy": "service",
+      "description": "Contact form leads interested in this service (inverse of contact-submission.service)."
+    },
     "order": {
       "type": "integer",
       "required": false,

@@ -6,9 +6,10 @@ shapes; the CMS should not rename or restructure them without updating this doc 
 frontend in the same PR.
 
 Status: **in progress** — `service`, `team-member`, `accomplishment`, `metric`,
-`value`, `testimonial`, `faq`, and `blog-post` exist (schemas, seeds, and public
-APIs are live; the Services, About, Accomplishments, Testimonials, FAQ, and Blog
-pages consume them). Remaining types are planned.
+`value`, `testimonial`, `faq`, `blog-post`, and `contact-submission` exist.
+Schemas/seeds/public APIs are live for the content types; `contact-submission` is
+user-generated (created only by the Contact form, read only in the admin).
+Remaining types are planned.
 
 ## Conventions
 
@@ -181,9 +182,34 @@ Support (2), published on first boot.
 
 API: `GET /api/faqs?sort[0]=order:asc`.
 
-All eight live content APIs are scoped to `find`/`findOne` on the public role —
-read-only, no auth required (see `cms/src/seed/index.ts`). Only published entries
-are returned.
+## Contact submissions (user-generated — never seeded)
+
+**Live.** Schema: `cms/src/api/contact-submission/content-types/contact-submission/schema.json`.
+Not seeded — entries are created by real form submissions only.
+
+| Field        | Type     | Notes                                          |
+| ------------ | -------- | ---------------------------------------------- |
+| name         | string   | required, ≤ 120                                |
+| email        | email    | required, ≤ 254 — format validated             |
+| company      | string   | optional, ≤ 200                                |
+| service      | relation | manyToOne → `api::service.service` (optional)  |
+| budgetRange  | enum     | optional — Under $10k / $10k–$25k / $25k–$50k / $50k+ / Not sure yet |
+| message      | text     | required, ≤ 5000                               |
+| source       | string   | referrer set by the submit handler             |
+
+API: the public API exposes **exactly one** endpoint —
+`POST /api/contact-submissions` (custom `submit` action, `auth: false`). It
+validates required fields + email format, drops honeypot-filled requests, and
+rate-limits per IP (see the controller). **There are no public GET routes** —
+submissions contain lead PII and are read only via the Strapi admin (Content
+Manager).
+
+## Public API boundary
+
+All content APIs are scoped to `find`/`findOne` on the public role — read-only,
+no auth required (see `cms/src/seed/index.ts`). Only published entries are
+returned. The single exception is the contact form: `POST /api/contact-submissions`
+is the one public write, and it is the only way entries are created.
 
 ## Components (reusable, not routable)
 
@@ -196,7 +222,8 @@ are returned.
 ## Boundary rules
 
 1. The frontend **reads** these endpoints via the `/api` proxy (dev) or
-   `VITE_CMS_API_URL` (prod). It never writes.
+   `VITE_CMS_API_URL` (prod). Its only write is the Contact form
+   (`POST /api/contact-submissions`), which the CMS validates server-side.
 2. Content types are created in Phase 2 **exactly** as named above — no renames later.
 3. If a field must change after content exists, add the field; don't rename (Strapi
    migrations for renames are error-prone with real content).

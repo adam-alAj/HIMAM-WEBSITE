@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contact_submissions",
+  "info": {
+    "singularName": "contact-submission",
+    "pluralName": "contact-submissions",
+    "displayName": "Contact Submission",
+    "description": "A lead submitted through the public Contact form. Entries are created only by the form endpoint (validated, honeypot-checked, rate-limited) and read by the team in the admin — never exposed to the public API."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "description": "Lead's name."
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "maxLength": 254,
+      "description": "Lead's email — format is validated by Strapi and by the submit handler."
+    },
+    "company": {
+      "type": "string",
+      "required": false,
+      "maxLength": 200,
+      "description": "Optional company."
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service",
+      "inversedBy": "contactSubmissions",
+      "required": false,
+      "description": "Service the lead is interested in (from the dropdown)."
+    },
+    "budgetRange": {
+      "type": "enumeration",
+      "enum": ["Under $10k", "$10k – $25k", "$25k – $50k", "$50k+", "Not sure yet"],
+      "required": false,
+      "description": "Optional project budget range. Keep in sync with the frontend BUDGET_RANGES."
+    },
+    "message": {
+      "type": "text",
+      "required": true,
+      "maxLength": 5000,
+      "description": "The lead's message."
+    },
+    "source": {
+      "type": "string",
+      "required": false,
+      "description": "Referrer set by the submit handler — where the visitor came from."
+    }
+  }
+}

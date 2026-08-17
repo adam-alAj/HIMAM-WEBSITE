@@ -1,0 +1,229 @@
+/* Contact page layout — tokens only (design-system/MASTER.md §17). */
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+.hero {
+  max-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-blue-600);
+}
+
+.title {
+  font-size: var(--text-h1);
+  line-height: var(--text-h1-line);
+}
+
+.lead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 52ch;
+}
+
+/* ------------------------------------------------------------------ *
+ * Layout — form + aside
+ * ------------------------------------------------------------------ */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.formCard {
+  padding: var(--space-8);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formTitle {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+}
+
+.formIntro {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  margin-top: calc(-1 * var(--space-2));
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.messageField {
+  display: flex;
+  flex-direction: column;
+}
+
+.formError {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-error-bg);
+  border: var(--border-width) solid var(--color-error);
+  border-radius: var(--radius-md);
+  color: var(--color-error);
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+}
+
+.formError svg {
+  flex-shrink: 0;
+  margin-top: var(--space-0-5);
+}
+
+.privacyNote {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Honeypot — removed from the visual and a11y tree; only bots find it. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Success state
+ * ------------------------------------------------------------------ */
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-10) 0;
+}
+
+.successIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  margin-bottom: var(--space-1);
+}
+
+.successTitle {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+}
+
+.successBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  max-width: 40ch;
+}
+
+/* ------------------------------------------------------------------ *
+ * Aside — secondary contact
+ * ------------------------------------------------------------------ */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.asideTitle {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+}
+
+.asideCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.asideIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  flex-shrink: 0;
+}
+
+.asideText {
+  flex: 1;
+  min-width: 0;
+}
+
+.asideLabel {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.asideValue {
+  display: block;
+  font-weight: var(--weight-semibold);
+  color: var(--color-blue-600);
+  margin-top: var(--space-0-5);
+  overflow-wrap: anywhere;
+}
+
+.asideBody {
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-0-5);
+}
+
+.asideNote {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive (MASTER.md §9) — mobile-first adjustments
+ * ------------------------------------------------------------------ */
+@media (max-width: 899px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 639px) {
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+}

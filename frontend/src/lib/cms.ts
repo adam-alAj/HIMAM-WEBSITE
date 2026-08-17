@@ -6,8 +6,10 @@
  * - Prod: VITE_CMS_API_URL points at the public CMS origin (frontend/.env.example),
  *   falling back to same-origin /api.
  *
- * All reads are unauthenticated GETs — the Strapi public role is scoped to
- * find/findOne on the Service API only (see cms/src/seed). The frontend never writes.
+ * Reads are unauthenticated GETs — the Strapi public role is scoped to
+ * find/findOne (see cms/src/seed). The only write is the Contact form
+ * (submitContactSubmission → POST /api/contact-submissions), which the CMS
+ * validates and rate-limits server-side.
  */
 
 const API_BASE = (import.meta.env.VITE_CMS_API_URL as string | undefined) ?? '/api'
@@ -153,6 +155,54 @@ async function get<T>(path: string): Promise<T> {
     throw new Error(`CMS request failed (${response.status} ${response.statusText})`)
   }
   return (await response.json()) as T
+}
+
+/* ------------------------------------------------------------------ *
+ * Contact form — the site's single public write
+ * ------------------------------------------------------------------ */
+
+/** Budget options — must match the CMS enum (cms/src/api/contact-submission schema). */
+export const BUDGET_RANGES = [
+  'Under $10k',
+  '$10k – $25k',
+  '$25k – $50k',
+  '$50k+',
+  'Not sure yet',
+] as const
+
+export interface ContactSubmissionInput {
+  name: string
+  email: string
+  company: string | null
+  /** Service document id from the Services fetch. */
+  service: number | null
+  budgetRange: string | null
+  message: string
+  /** Honeypot — must stay empty; bots that fill it get a fake success. */
+  honeypot: string
+}
+
+/**
+ * Submits the contact form to the CMS. Throws on failure — the caller shows
+ * the error (a 429 gets a friendlier retry message).
+ */
+export async function submitContactSubmission(input: ContactSubmissionInput): Promise<void> {
+  const response = await fetch(`${API_BASE}/contact-submissions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+
+  if (!response.ok) {
+    let message = `Submission failed (${response.status} ${response.statusText})`
+    try {
+      const body = (await response.json()) as { error?: { message?: string } }
+      if (body.error?.message) message = body.error.message
+    } catch {
+      // Non-JSON error body — keep the generic message.
+    }
+    throw new Error(message)
+  }
 }
 
 /**

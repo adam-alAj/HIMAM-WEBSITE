@@ -455,6 +455,10 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    contactSubmissions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -509,6 +513,64 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
       'api::testimonial.testimonial'
     >;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactSubmissionContactSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissions';
+  info: {
+    description: 'A lead submitted through the public Contact form. Entries are created only by the form endpoint (validated, honeypot-checked, rate-limited) and read by the team in the admin — never exposed to the public API.';
+    displayName: 'Contact Submission';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    budgetRange: Schema.Attribute.Enumeration<
+      [
+        'Under $10k',
+        '$10k – $25k',
+        '$25k – $50k',
+        '$50k+',
+        'Not sure yet',
+      ]
+    >;
+    company: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 254;
+      }>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 5000;
+      }>;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    service: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::service.service'
+    >;
+    source: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1325,6 +1387,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::accomplishment.accomplishment': ApiAccomplishmentAccomplishment;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::faq.faq': ApiFaqFaq;
       'api::metric.metric': ApiMetricMetric;
       'api::service.service': ApiServiceService;

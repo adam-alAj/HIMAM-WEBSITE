@@ -12,7 +12,7 @@
  *
  * Editing content afterwards happens in the Strapi admin — no code deploy.
  */
-import type { Core, Schema, UID } from '@strapi/strapi';
+import type { Core, Modules, Schema, UID } from '@strapi/strapi';
 
 /* ------------------------------------------------------------------ *
  * Block helpers — Strapi "blocks" rich text
@@ -785,12 +785,15 @@ async function seedCollection<T>(
   }
 
   for (const seed of seeds) {
-    await strapi.entityService.create(uid, {
-      data: {
-        ...seed,
-        publishedAt: new Date().toISOString(),
-      },
-    });
+    // The spread of a generic seed type can't be proven assignable to the
+    // union of entity inputs, so assert through unknown — the seed interfaces
+    // above are the source of truth and are checked against the generated
+    // content types by tsc at the call sites.
+    const data = {
+      ...seed,
+      publishedAt: new Date().toISOString(),
+    } as unknown as Modules.EntityService.Params.Data.Input<typeof uid>;
+    await strapi.entityService.create(uid, { data });
   }
   strapi.log.info(`[seed] created ${seeds.length} ${label}.`);
 }

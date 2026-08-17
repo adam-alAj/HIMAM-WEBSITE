@@ -1,19 +1,23 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import ComingSoon from './pages/ComingSoon'
+import { SiteLayout } from './layouts/SiteLayout'
+import Home from './pages/Home'
+import PagePlaceholder from './pages/PagePlaceholder'
 import StyleGuide from './pages/StyleGuide'
 
 /**
- * App shell. Route map stays minimal during the design-system phase:
- * `/` is the Phase 1 placeholder; `/style-guide` is the visual QA
- * environment for the design system (design-system/MASTER.md §16–17).
- * Real site pages are added in later phases.
+ * App shell. Every route renders through the shared SiteLayout (skip link,
+ * Navbar, Footer). The catch-all placeholder keeps navigation functional
+ * until pages land in later phases (Services, About, Blog, Privacy, …).
  */
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<ComingSoon />} />
-        <Route path="/style-guide" element={<StyleGuide />} />
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/style-guide" element={<StyleGuide />} />
+          <Route path="*" element={<PagePlaceholder />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

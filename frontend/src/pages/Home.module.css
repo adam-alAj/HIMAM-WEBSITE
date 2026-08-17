@@ -1,0 +1,302 @@
+/* Home page layout — tokens only; all visuals come from the component
+ * library (design-system/MASTER.md §16–17). */
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+.hero {
+  max-width: 52rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: var(--text-display);
+  line-height: var(--text-display-line);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+}
+
+.heroLead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 46ch;
+}
+
+.heroNote {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ *
+ * Section headers
+ * ------------------------------------------------------------------ */
+.sectionHead {
+  max-width: 44rem;
+  margin-bottom: var(--space-10);
+}
+
+.sectionEyebrow {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-blue-600);
+}
+
+.sectionTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  margin-top: var(--space-2);
+}
+
+.sectionIntro {
+  margin-top: var(--space-3);
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+}
+
+/* Navy-section header: override the section's p color for the eyebrow
+ * (blue-300 on blue-900 ≈ 7.8:1 — AA). */
+.sectionHeadNavy .sectionEyebrow {
+  color: var(--color-blue-300);
+}
+
+/* ------------------------------------------------------------------ *
+ * What we build — offering cards
+ * ------------------------------------------------------------------ */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-6);
+}
+
+.buildCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.iconTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  margin-bottom: var(--space-2);
+}
+
+.cardTitle {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+}
+
+.cardBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+}
+
+.cardAction {
+  margin-top: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ *
+ * Services teaser — row list
+ * ------------------------------------------------------------------ */
+.serviceList {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.serviceRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-6);
+  align-items: center;
+  padding: var(--space-6) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.serviceRow:hover {
+  background: var(--color-blue-50);
+}
+
+.serviceText {
+  padding: 0 var(--space-3);
+}
+
+.serviceTitle {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-1-5);
+}
+
+.serviceBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  max-width: 56ch;
+}
+
+.serviceLink {
+  margin-right: var(--space-3);
+}
+
+/* ------------------------------------------------------------------ *
+ * Proof — stats + client marks (navy band)
+ * ------------------------------------------------------------------ */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-8);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.statNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-inverse);
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-inverse-muted);
+}
+
+.clients {
+  margin-top: var(--space-16);
+}
+
+.clientsLabel {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-inverse-muted);
+}
+
+.clientList {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.clientMark {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-body);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-inverse-muted);
+  opacity: 0.85;
+}
+
+/* ------------------------------------------------------------------ *
+ * Testimonials
+ * ------------------------------------------------------------------ */
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.quote {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+}
+
+.quoteAuthor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  margin-top: var(--space-6);
+}
+
+.authorName {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.authorRole {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * CTA row + final banner
+ * ------------------------------------------------------------------ */
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ctaBanner {
+  max-width: 40rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+}
+
+.ctaLead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  max-width: 40ch;
+}
+
+.ctaNote {
+  font-size: var(--text-body-sm);
+  margin-top: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive (MASTER.md §9) — mobile-first adjustments
+ * ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .serviceRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .serviceLink {
+    justify-self: start;
+    margin: 0 0 0 var(--space-3);
+  }
+
+  .statsGrid {
+    gap: var(--space-6);
+  }
+}

@@ -2,11 +2,9 @@ import { useState, type ReactNode } from 'react'
 import { Badge } from '../components/Badge/Badge'
 import { Button } from '../components/Button/Button'
 import { Card } from '../components/Card/Card'
-import { Footer } from '../components/Footer/Footer'
 import { Icon } from '../components/Icon/Icon'
 import { Input } from '../components/Input/Input'
 import { Modal } from '../components/Modal/Modal'
-import { Navbar } from '../components/Navbar/Navbar'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import styles from './StyleGuide.module.css'
@@ -170,8 +168,6 @@ export default function StyleGuide() {
 
   return (
     <>
-      <Navbar />
-
       <main id="main">
         {/* Intro */}
         <Section background="default" padding="lg">
@@ -575,14 +571,13 @@ export default function StyleGuide() {
         {/* Navbar & footer note */}
         <Section background="subtle" padding="lg">
           <SectionHead eyebrow="Layout" title="Navbar &amp; footer">
-            The sticky navbar above this section and the footer at the bottom of this
-            page are the real components. Below 768 px the navbar collapses to a
-            hamburger menu (try resizing the viewport).
+            The sticky navbar at the top and the footer at the bottom of this page come
+            from the shared site layout (<code>layouts/SiteLayout</code>) — every route
+            on the site uses them. Below 768 px the navbar collapses to a hamburger
+            menu (try resizing the viewport).
           </SectionHead>
         </Section>
       </main>
-
-      <Footer />
 
       <Modal
         open={modalOpen}

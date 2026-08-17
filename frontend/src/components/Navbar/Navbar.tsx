@@ -58,6 +58,7 @@ export function Navbar({ links = defaultLinks, cta = defaultCta, className }: Na
               <li key={link.to}>
                 <NavLink
                   to={link.to}
+                  end={link.to === '/'}
                   className={({ isActive }) =>
                     isActive ? `${styles.link} ${styles.linkActive}` : styles.link
                   }

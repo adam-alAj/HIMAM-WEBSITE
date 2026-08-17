@@ -112,47 +112,23 @@ select {
 }
 
 /* ------------------------------------------------------------------ *
- * Phase 1 placeholder (ComingSoon) — restyled with design tokens.
- * This is not a site page; it will be replaced by CMS-driven pages in a
- * later phase. */
-#root {
-  min-height: 100svh;
-}
-
-.coming-soon {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: var(--space-4);
-  padding: var(--space-8);
-}
-
-.eyebrow {
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
+ * Skip link — first focusable element, revealed on keyboard focus
+ * (MASTER.md §11, §12). Rendered by layouts/SiteLayout. */
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-skip-link);
+  transform: translateY(-250%);
+  background: var(--color-blue-900);
+  color: var(--color-text-inverse);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--text-label-tracking);
-  text-transform: uppercase;
-  color: var(--color-blue-600);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.coming-soon h1 {
-  font-size: var(--text-h1);
-  line-height: var(--text-h1-line);
-  max-width: 18ch;
-}
-
-.tagline {
-  font-size: var(--text-body-lg);
-  line-height: var(--text-body-lg-line);
-  color: var(--color-text-secondary);
-  max-width: 44ch;
-}
-
-.note {
-  font-size: var(--text-body-sm);
-  color: var(--color-text-muted);
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline-color: var(--focus-color-inverse);
 }

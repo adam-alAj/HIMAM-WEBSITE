@@ -13,6 +13,23 @@
 const API_BASE = (import.meta.env.VITE_CMS_API_URL as string | undefined) ?? '/api'
 
 /**
+ * Origin the CMS serves media from (API base minus the /api suffix). In dev
+ * this is empty, so uploads resolve through the Vite /uploads proxy (see
+ * frontend/vite.config.ts); in prod it's the CMS origin.
+ */
+const CMS_ORIGIN = API_BASE.replace(/\/api\/?$/, '')
+
+/**
+ * Absolute URL for a Strapi media file (relative paths are relative to the
+ * CMS, not the frontend). Returns null for empty input.
+ */
+export function resolveMediaUrl(url: string | null | undefined): string | null {
+  if (!url) return null
+  if (/^https?:\/\//.test(url)) return url
+  return `${CMS_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`
+}
+
+/**
  * Icon names allowed by the CMS `service.icon` enum. Each must exist in the
  * frontend Icon set (frontend/src/components/Icon/icons.tsx) — the enum and this
  * list are documented as a shared contract in cms/src/api/service schema.
@@ -343,4 +360,70 @@ export async function fetchFaqs(): Promise<Faq[]> {
   })
   const { data } = await get<StrapiListResponse<Faq>>(`/faqs?${params}`)
   return data
+}
+
+/* ------------------------------------------------------------------ *
+ * Blog posts
+ * ------------------------------------------------------------------ */
+
+export type BlogCategory = 'Engineering' | 'AI & Automation' | 'Process' | 'Company'
+
+export interface BlogPost {
+  id: number
+  documentId: string
+  title: string
+  slug: string
+  excerpt: string
+  coverImage: MediaFile | null
+  body: Blocks
+  /** Populated via `populate=author` (name/role/photo used by bylines). */
+  author: Pick<TeamMember, 'id' | 'documentId' | 'name' | 'role' | 'photo'> | null
+  category: BlogCategory
+  seoTitle: string | null
+  seoDescription: string | null
+  publishedAt: string
+}
+
+export interface BlogPostsPage {
+  posts: BlogPost[]
+  pagination: { page: number; pageSize: number; pageCount: number; total: number }
+}
+
+/** Query params shared by every blog fetch — author + cover populated. */
+function blogParams(): URLSearchParams {
+  const params = new URLSearchParams()
+  params.append('populate[0]', 'author')
+  params.append('populate[1]', 'coverImage')
+  return params
+}
+
+/**
+ * A page of published posts, newest first, with author + cover populated.
+ * Endpoint: GET /api/blog-posts?populate[0]=author&populate[1]=coverImage&sort[0]=publishedAt:desc&pagination[page]=N&pagination[pageSize]=M[&filters[category][$eq]=…]
+ */
+export async function fetchBlogPosts(params: {
+  page?: number
+  pageSize?: number
+  category?: BlogCategory | null
+}): Promise<BlogPostsPage> {
+  const query = blogParams()
+  query.set('sort[0]', 'publishedAt:desc')
+  query.set('pagination[page]', String(params.page ?? 1))
+  query.set('pagination[pageSize]', String(params.pageSize ?? 6))
+  if (params.category) query.set('filters[category][$eq]', params.category)
+
+  const { data, meta } = await get<StrapiListResponse<BlogPost>>(`/blog-posts?${query}`)
+  return { posts: data, pagination: meta.pagination }
+}
+
+/**
+ * A single published post by slug, or null when it doesn't resolve.
+ * Endpoint: GET /api/blog-posts?filters[slug][$eq]=<slug>&populate[0]=author&populate[1]=coverImage
+ */
+export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const query = blogParams()
+  query.set('filters[slug][$eq]', slug)
+  query.set('pagination[pageSize]', '1')
+  const { data } = await get<StrapiListResponse<BlogPost>>(`/blog-posts?${query}`)
+  return data[0] ?? null
 }

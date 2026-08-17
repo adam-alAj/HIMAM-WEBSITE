@@ -6,9 +6,9 @@ shapes; the CMS should not rename or restructure them without updating this doc 
 frontend in the same PR.
 
 Status: **in progress** — `service`, `team-member`, `accomplishment`, `metric`,
-`value`, `testimonial`, and `faq` exist (schemas, seeds, and public APIs are live;
-the Services, About, Accomplishments, Testimonials, and FAQ pages consume them).
-Remaining types are planned.
+`value`, `testimonial`, `faq`, and `blog-post` exist (schemas, seeds, and public
+APIs are live; the Services, About, Accomplishments, Testimonials, FAQ, and Blog
+pages consume them). Remaining types are planned.
 
 ## Conventions
 
@@ -37,17 +37,27 @@ API: `GET /api/pages?filters[slug][$eq]=home` — the frontend fetches a page by
 
 ### 2. `blog-post` — studio articles
 
-| Field       | Type            | Notes                          |
-| ----------- | --------------- | ------------------------------ |
-| title       | string          |                                |
-| slug        | uid             | unique                         |
-| excerpt     | text            | list teaser                    |
-| content     | blocks (richtext)| main body                     |
-| coverImage  | media (image)   | single                        |
-| publishedAt | datetime        |                                |
+**Live.** Schema: `cms/src/api/blog-post/content-types/blog-post/schema.json`.
+Seed: three posts authored by the seeded team members, published on first boot
+with staggered dates.
 
-API: `GET /api/blog-posts` (list) and `GET /api/blog-posts/:slug` (detail via
-`filters[slug][$eq]`). Sorted by `publishedAt` descending.
+| Field          | Type     | Notes                                     |
+| -------------- | -------- | ----------------------------------------- |
+| title          | string   | required                                  |
+| slug           | uid      | unique, from title — routes on this       |
+| excerpt        | text     | required, ≤ 220 chars — card teaser       |
+| coverImage     | media    | optional — also used as og:image          |
+| body           | blocks   | required — the article                    |
+| author         | relation | manyToOne → `api::team-member.team-member` (optional) |
+| category       | enum     | required — Engineering / AI & Automation / Process / Company |
+| seoTitle       | string   | optional — overrides page/social title    |
+| seoDescription | text     | optional, ≤ 160 chars — falls back to excerpt |
+
+Inverse relation on `team-member`: `blogPosts` (oneToMany, mappedBy `author`).
+
+API: `GET /api/blog-posts?populate[0]=author&populate[1]=coverImage&sort[0]=publishedAt:desc&pagination[page]=1&pagination[pageSize]=6`
+(list) and `GET /api/blog-posts?filters[slug][$eq]=<slug>&populate[0]=author&populate[1]=coverImage`
+(detail).
 
 ### 3. `service` — offerings (apps, websites, systems, AI chatbots)
 
@@ -171,7 +181,7 @@ Support (2), published on first boot.
 
 API: `GET /api/faqs?sort[0]=order:asc`.
 
-All seven live content APIs are scoped to `find`/`findOne` on the public role —
+All eight live content APIs are scoped to `find`/`findOne` on the public role —
 read-only, no auth required (see `cms/src/seed/index.ts`). Only published entries
 are returned.
 

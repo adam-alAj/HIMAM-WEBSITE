@@ -1,0 +1,63 @@
+/* Blog post card — tokens only (design-system/MASTER.md §17). */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.coverPlaceholder {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: var(--space-4);
+  background: var(--color-blue-900);
+  color: var(--color-text-inverse-muted);
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  flex: 1;
+}
+
+.metaRow {
+  margin-bottom: var(--space-1);
+}
+
+.title {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+}
+
+.excerpt {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  font-size: var(--text-body-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.byline {
+  margin-top: auto;
+  padding-top: var(--space-4);
+}

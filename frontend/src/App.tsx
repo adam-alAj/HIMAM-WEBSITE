@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { SiteLayout } from './layouts/SiteLayout'
 import About from './pages/About'
 import Accomplishments from './pages/Accomplishments'
+import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
 import Faq from './pages/Faq'
 import Home from './pages/Home'
 import PagePlaceholder from './pages/PagePlaceholder'
@@ -13,7 +15,7 @@ import Testimonials from './pages/Testimonials'
 /**
  * App shell. Every route renders through the shared SiteLayout (skip link,
  * Navbar, Footer). The catch-all placeholder keeps navigation functional
- * until pages land in later phases (Blog, Privacy, …).
+ * until pages land in later phases (Privacy, …).
  */
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/accomplishments" element={<Accomplishments />} />
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="*" element={<PagePlaceholder />} />
         </Route>

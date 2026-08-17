@@ -1,0 +1,63 @@
+/* Author byline — tokens only (design-system/MASTER.md §17). */
+
+.byline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar,
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.avatar {
+  object-fit: cover;
+  border: var(--border-width) solid var(--color-border);
+}
+
+.avatarPlaceholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  font-family: var(--font-display);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+}
+
+.name,
+.nameLink {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  font-size: var(--text-body-sm);
+}
+
+.nameLink {
+  color: var(--color-blue-600);
+}
+
+.nameLink:hover {
+  color: var(--color-blue-700);
+}
+
+.meta {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}

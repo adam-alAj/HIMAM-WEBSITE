@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog_posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog Post",
+    "description": "A studio article shown on the Blog. Title, slug, SEO fields, and the author relation are set here; the frontend renders everything from the CMS with no code changes."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Headline — used in the URL slug and as the default SEO title."
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "description": "URL slug, e.g. \"how-we-approach-ai-chatbot-projects\". Change it before publishing — the blog routes on this."
+    },
+    "excerpt": {
+      "type": "text",
+      "required": true,
+      "maxLength": 220,
+      "description": "Card teaser shown on the Blog listing."
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Card and article cover. Also used as the og:image for social sharing."
+    },
+    "body": {
+      "type": "blocks",
+      "required": true,
+      "description": "The article itself — headings, paragraphs, lists."
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::team-member.team-member",
+      "inversedBy": "blogPosts",
+      "required": false,
+      "description": "The team member who wrote this post. Shown in the byline, linked to the About page."
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["Engineering", "AI & Automation", "Process", "Company"],
+      "required": true,
+      "default": "Engineering",
+      "description": "Grouping shown on the Blog listing filter."
+    },
+    "seoTitle": {
+      "type": "string",
+      "required": false,
+      "description": "Optional — overrides the page title in browsers and search results."
+    },
+    "seoDescription": {
+      "type": "text",
+      "required": false,
+      "maxLength": 160,
+      "description": "Optional — used for the meta description and social share text. Falls back to the excerpt."
+    }
+  }
+}

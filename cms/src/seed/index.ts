@@ -643,6 +643,127 @@ export const faqSeeds: FaqSeed[] = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * Blog posts — authored by the seeded team members
+ * ------------------------------------------------------------------ */
+
+type BlogCategory = 'Engineering' | 'AI & Automation' | 'Process' | 'Company';
+
+interface BlogPostSeed {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: Blocks;
+  /** Name of the seeded TeamMember this post is attributed to. */
+  authorName: string;
+  category: BlogCategory;
+  seoTitle: string;
+  seoDescription: string;
+  /** Staggered so the listing looks like a real publication history. */
+  publishedAt: string;
+}
+
+const weeksAgo = (weeks: number) =>
+  new Date(Date.now() - weeks * 7 * 24 * 60 * 60 * 1000).toISOString();
+
+export const blogPostSeeds: BlogPostSeed[] = [
+  {
+    title: 'How we approach AI chatbot projects',
+    slug: 'how-we-approach-ai-chatbot-projects',
+    excerpt:
+      'Most chatbots sound like a FAQ page wearing a costume. Here’s the process we use to build assistants that actually do work — grounded in your data, guarded where it matters, and handed off to a human at the right moment.',
+    body: [
+      p(
+        'Everyone has a chatbot horror story: the support bot that answered every question with a link to the same help page, the “AI assistant” that was really a menu tree. We’ve built assistants that actually do work, and the difference isn’t the model — it’s the process around it.'
+      ),
+      heading('Start with what the model can’t do', 2),
+      p(
+        'Before we write a line of integration code, we write down every case where the assistant should refuse or hand off: refunds over a threshold, medical questions, anything a human needs to own. That list becomes the guardrails, and it’s the first thing the client reviews.'
+      ),
+      heading('Ground it in your data', 2),
+      p(
+        'An assistant is only as good as what it can cite. We connect it to your knowledge base, product docs, and order data — and every answer links to its source, so a customer can check the answer instead of trusting it.'
+      ),
+      heading('Measure deflection, not just conversations', 2),
+      list([
+        'Ticket volume before vs. after launch',
+        'First-reply time for handled questions',
+        'Handoff rate — and whether the AI escalated at the right moment',
+        'Cost per resolved conversation',
+      ]),
+      p(
+        'If the numbers don’t move in the first quarter, we change the scope — not the story.'
+      ),
+    ],
+    authorName: 'Priya Raghavan',
+    category: 'AI & Automation',
+    seoTitle: 'How we approach AI chatbot projects — Himam',
+    seoDescription:
+      'The process we use to build AI assistants that actually do work — grounded in your data, guarded where it matters, and handed off to a human at the right moment.',
+    publishedAt: weeksAgo(3),
+  },
+  {
+    title: 'Choosing the right tech stack for your startup',
+    slug: 'choosing-the-right-tech-stack-for-your-startup',
+    excerpt:
+      'Boring, well-supported technology isn’t a lack of ambition — it’s what lets a two-person team ship this quarter and a future developer maintain it next year. Our honest take on picking a stack.',
+    body: [
+      p(
+        'Every startup we talk to has a different opinion on frameworks and one shared fear: picking the wrong one and paying for it later. Here’s the honest version — your stack barely matters at the start. Your ability to ship and change it does.'
+      ),
+      heading('The stack we default to', 2),
+      list([
+        'React and TypeScript for anything a human looks at',
+        'Node.js and PostgreSQL for anything that stores data',
+        'Strapi for content your team edits without code',
+        'Containerised deploys with CI/CD from day one',
+      ]),
+      p(
+        'We choose these because they’re boring: hiring is easy, documentation is endless, and the odds of the ecosystem disappearing are close to zero.'
+      ),
+      heading('How we’d choose differently', 2),
+      p(
+        'If you need heavy data processing, we’d reach for a specialist tool and isolate it behind an API. If you’re building a real-time product, we’d add the right pieces for that — but we’d still keep the core boring. The rule we give clients: exotic where it buys you something specific, boring everywhere else.'
+      ),
+    ],
+    authorName: 'Jonas Bergström',
+    category: 'Engineering',
+    seoTitle: 'Choosing the right tech stack for your startup — Himam',
+    seoDescription:
+      'Why boring, well-supported technology is the right default for a startup — and how to pick the exceptions that actually earn their complexity.',
+    publishedAt: weeksAgo(2),
+  },
+  {
+    title: 'A day in the life of our team',
+    slug: 'a-day-in-the-life-of-our-team',
+    excerpt:
+      'Three engineers, zero account managers. What a Tuesday actually looks like at Himam — from the morning review to shipping code the client sees the same day.',
+    body: [
+      p(
+        'People ask what it’s like to work at a three-person studio. The honest answer: the same job as a big agency, minus the meetings about meetings, plus the requirement that everything we ship is ours.'
+      ),
+      heading('09:00 — Review what shipped yesterday', 2),
+      p(
+        'We start with the code, not a status dashboard. Every pull request gets a review from someone senior — which, at three people, means everyone. Comments are about behaviour and edge cases, not style.'
+      ),
+      heading('13:00 — Client builds', 2),
+      p(
+        'Afternoons are for client work: a portal rebuild, an AI assistant, a site migration. Each project gets a working build pushed to a demo environment the client can click through — so “progress” is something you can see, not a slide.'
+      ),
+      heading('17:00 — Ship something small', 2),
+      p(
+        'Every day ends with a small, verifiable improvement deployed to production. It keeps the release muscle warm, so when a real release lands, it’s unremarkable. That’s the point — our clients should find launching boring too.'
+      ),
+    ],
+    authorName: 'Sana Qureshi',
+    category: 'Company',
+    seoTitle: 'A day in the life of our team — Himam',
+    seoDescription:
+      'What a Tuesday looks like at a three-person software studio — morning code review, client builds, and shipping something small every day.',
+    publishedAt: weeksAgo(1),
+  },
+];
+
+/* ------------------------------------------------------------------ *
  * Seeding
  * ------------------------------------------------------------------ */
 
@@ -715,6 +836,43 @@ async function seedTestimonials(strapi: Core.Strapi): Promise<void> {
   strapi.log.info(`[seed] created ${testimonialSeeds.length} testimonials.`);
 }
 
+/**
+ * Insert the blog posts if the collection is empty, resolving each seed's
+ * `authorName` against the seeded team members so the byline relation is real.
+ */
+async function seedBlogPosts(strapi: Core.Strapi): Promise<void> {
+  const uid = 'api::blog-post.blog-post';
+  const count = await strapi.query(uid).count();
+
+  if (count > 0) {
+    strapi.log.info('[seed] blog posts already present — skipping.');
+    return;
+  }
+
+  const authorNames = [...new Set(blogPostSeeds.map((seed) => seed.authorName))];
+  const authors = await strapi
+    .query('api::team-member.team-member')
+    .findMany({ where: { name: { $in: authorNames } } });
+  const authorIdByName = new Map(authors.map((author) => [author.name, author.id]));
+
+  for (const seed of blogPostSeeds) {
+    await strapi.entityService.create(uid, {
+      data: {
+        title: seed.title,
+        slug: seed.slug,
+        excerpt: seed.excerpt,
+        body: seed.body,
+        category: seed.category,
+        seoTitle: seed.seoTitle,
+        seoDescription: seed.seoDescription,
+        author: authorIdByName.get(seed.authorName) ?? null,
+        publishedAt: seed.publishedAt,
+      },
+    });
+  }
+  strapi.log.info(`[seed] created ${blogPostSeeds.length} blog posts.`);
+}
+
 /** Seed every demo collection on first boot (disable with SEED_DEMO_CONTENT=false). */
 export async function seedAll(strapi: Core.Strapi): Promise<void> {
   await seedCollection(strapi, 'api::service.service', 'services', serviceSeeds);
@@ -729,6 +887,7 @@ export async function seedAll(strapi: Core.Strapi): Promise<void> {
   await seedCollection(strapi, 'api::value.value', 'values', valueSeeds);
   await seedTestimonials(strapi);
   await seedCollection(strapi, 'api::faq.faq', 'faqs', faqSeeds);
+  await seedBlogPosts(strapi);
 }
 
 /* ------------------------------------------------------------------ *
@@ -749,6 +908,7 @@ const PUBLIC_APIS = [
   'value',
   'testimonial',
   'faq',
+  'blog-post',
 ] as const;
 
 /**

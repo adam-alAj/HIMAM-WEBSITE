@@ -1,0 +1,165 @@
+/* Blog listing page layout — tokens only (design-system/MASTER.md §17). */
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+.hero {
+  max-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-blue-600);
+}
+
+.title {
+  font-size: var(--text-h1);
+  line-height: var(--text-h1-line);
+}
+
+.lead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 52ch;
+}
+
+/* ------------------------------------------------------------------ *
+ * Category tabs
+ * ------------------------------------------------------------------ */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.tab {
+  min-height: 40px;
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.tab:hover {
+  border-color: var(--color-blue-300);
+  color: var(--color-blue-700);
+}
+
+.tabActive,
+.tabActive:hover {
+  background: var(--color-blue-600);
+  border-color: var(--color-blue-600);
+  color: var(--color-text-on-primary);
+}
+
+/* ------------------------------------------------------------------ *
+ * Grid + pagination
+ * ------------------------------------------------------------------ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+
+.pageInfo {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * Skeleton + states
+ * ------------------------------------------------------------------ */
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  padding: var(--space-6);
+}
+
+.statePanel {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-12) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.errorIcon {
+  color: var(--color-error);
+}
+
+.stateTitle {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+}
+
+.stateBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  max-width: 40ch;
+}
+
+/* ------------------------------------------------------------------ *
+ * Final CTA band (navy)
+ * ------------------------------------------------------------------ */
+.cta {
+  max-width: 40rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+}
+
+.ctaLead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  max-width: 44ch;
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}

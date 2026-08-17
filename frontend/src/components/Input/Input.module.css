@@ -1,0 +1,100 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  font-size: var(--text-body);
+  line-height: var(--text-body-line);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.input {
+  padding: 0 var(--space-4);
+}
+
+.sizeMd .input {
+  height: 40px;
+}
+
+.sizeLg .input {
+  height: 48px;
+}
+
+.textarea {
+  min-height: 120px;
+  padding: var(--space-3) var(--space-4);
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Hover */
+.input:hover:not(:disabled),
+.textarea:hover:not(:disabled) {
+  border-color: var(--color-blue-500);
+}
+
+/* Focus — ring via box-shadow replaces the global outline to avoid doubling */
+.input:focus-visible,
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-blue-600);
+  box-shadow: var(--shadow-focus);
+}
+
+/* Disabled */
+.input:disabled,
+.textarea:disabled {
+  background: var(--color-off-white);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* Error */
+.hasError .input,
+.hasError .textarea {
+  border-color: var(--color-error);
+}
+
+.hasError .input:focus-visible,
+.hasError .textarea:focus-visible {
+  box-shadow: var(--shadow-focus-error);
+}
+
+.hint {
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-muted);
+}
+
+.errorText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-error);
+}

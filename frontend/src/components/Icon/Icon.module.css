@@ -1,0 +1,16 @@
+.icon {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Used by the Button loading spinner. The global prefers-reduced-motion
+ * rule in index.css freezes this animation. */
+.spin {
+  animation: spin var(--duration-base) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment & secrets (never commit .env — only .env.example)
+.env
+.env.*
+!.env.example
+
+# Strapi runtime artifacts
+cms/.tmp/
+cms/exports/
+cms/public/uploads/*
+!cms/public/uploads/.gitkeep
+
+# Logs & temp
+*.log
+.tmp/
+.DS_Store
+Thumbs.db
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp

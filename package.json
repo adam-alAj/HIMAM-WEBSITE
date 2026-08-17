@@ -1,0 +1,14 @@
+{
+  "name": "himam-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo for the Himam software engineering studio marketing website: React frontend, Strapi CMS, PostgreSQL.",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:cms": "npm --prefix cms run develop",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:cms": "npm --prefix cms run build",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down"
+  }
+}

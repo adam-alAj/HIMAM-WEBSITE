@@ -1,0 +1,70 @@
+.section {
+  width: 100%;
+}
+
+.bgDefault {
+  background: var(--color-white);
+}
+
+.bgSubtle {
+  background: var(--color-blue-50);
+}
+
+.bgLight {
+  background: var(--color-blue-100);
+}
+
+.bgNavy {
+  background: var(--color-blue-900);
+  color: var(--color-text-inverse);
+}
+
+.bgNavy :global(h1),
+.bgNavy :global(h2),
+.bgNavy :global(h3),
+.bgNavy :global(h4),
+.bgNavy :global(h5),
+.bgNavy :global(h6) {
+  color: var(--color-text-inverse);
+}
+
+.bgNavy :global(p) {
+  color: var(--color-text-inverse-muted);
+}
+
+/* Width-constrained container (MASTER.md §8) */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.widthDefault {
+  max-width: var(--container);
+}
+
+.widthNarrow {
+  max-width: var(--container-narrow);
+}
+
+.widthWide {
+  max-width: var(--container-wide);
+}
+
+/* Vertical rhythm — fluid on lg so sections scale naturally
+ * between 375px and 1440px (MASTER.md §9). */
+.padNone {
+  padding-block: 0;
+}
+
+.padSm {
+  padding-block: var(--space-8);
+}
+
+.padMd {
+  padding-block: var(--space-16);
+}
+
+.padLg {
+  padding-block: clamp(var(--space-16), 8vw, var(--space-24));
+}

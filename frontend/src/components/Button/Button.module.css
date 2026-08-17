@@ -1,0 +1,149 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-button);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* Sizes — touch targets ≥ 40px (MASTER.md §15) */
+.sm {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-button);
+  border-radius: var(--radius-sm);
+}
+
+.md {
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-button);
+}
+
+.lg {
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-button-lg);
+}
+
+/* Icon-only: square, sized to match each height */
+.iconOnly {
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.sm.iconOnly {
+  width: 36px;
+}
+
+.md.iconOnly {
+  width: 40px;
+}
+
+.lg.iconOnly {
+  width: 48px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* ------------------------------------------------------------------ *
+ * Variants
+ * ------------------------------------------------------------------ */
+.primary {
+  background: var(--color-blue-600);
+  color: var(--color-text-on-primary);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-blue-700);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--color-blue-800);
+}
+
+.secondary {
+  background: var(--color-white);
+  color: var(--color-blue-700);
+  border-color: var(--color-blue-300);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--color-blue-50);
+  border-color: var(--color-blue-600);
+  color: var(--color-blue-800);
+}
+
+.secondary:active:not(:disabled) {
+  background: var(--color-blue-100);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-blue-700);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--color-blue-50);
+  color: var(--color-blue-800);
+}
+
+.ghost:active:not(:disabled) {
+  background: var(--color-blue-100);
+}
+
+.danger {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--color-error-hover);
+}
+
+.danger:active:not(:disabled) {
+  background: var(--color-error-active);
+}
+
+/* ------------------------------------------------------------------ *
+ * States
+ * ------------------------------------------------------------------ */
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-flex;
+}
+
+.spin {
+  animation: spin var(--duration-base) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+}

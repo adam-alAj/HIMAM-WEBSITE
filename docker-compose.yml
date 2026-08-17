@@ -1,0 +1,48 @@
+# Local development infrastructure for the Himam website.
+#
+# Default workflow: run only the database here, and run the apps locally
+# (`npm run dev:cms`, `npm run dev:frontend`). The Strapi container below is
+# optional for people who prefer a fully containerized CMS.
+#
+# All values have safe local-dev defaults; override them with a root `.env`
+# file (see variables below) without changing this file.
+
+name: himam
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: himam-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-himam}
+      POSTGRES_USER: ${POSTGRES_USER:-himam}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-himam_dev_pw}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-himam} -d ${POSTGRES_DB:-himam}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # Optional: run Strapi itself in Docker (replaces `npm run dev:cms`).
+  # Requires cms/.env with the same DATABASE_* values used above. To use:
+  #   docker compose up -d db cms
+  #
+  # cms:
+  #   build:
+  #     context: ./cms
+  #   container_name: himam-cms
+  #   restart: unless-stopped
+  #   env_file: ./cms/.env
+  #   ports:
+  #     - "1337:1337"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+
+volumes:
+  db_data:

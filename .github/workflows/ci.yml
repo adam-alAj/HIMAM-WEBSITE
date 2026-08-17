@@ -1,0 +1,163 @@
+name: CI
+
+# Runs on every pull request (blocking merge) and on push to main (so the CD
+# workflow only ever deploys code that passed every check here).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend — lint, typecheck, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm --prefix frontend ci
+
+      - name: Lint
+        run: npm --prefix frontend run lint
+
+      - name: Typecheck + build
+        run: npm --prefix frontend run build
+
+      - name: Unit tests (Vitest + React Testing Library)
+        run: npm --prefix frontend test
+
+  cms:
+    name: CMS — typecheck + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: cms/package-lock.json
+
+      - name: Install dependencies
+        run: npm --prefix cms ci
+
+      - name: Typecheck
+        run: npm --prefix cms exec tsc -- --noEmit -p tsconfig.json
+
+      - name: Build Strapi
+        run: npm --prefix cms run build
+
+  backend-api:
+    name: Backend — public API shape + permission tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: himam
+          POSTGRES_USER: himam
+          POSTGRES_PASSWORD: himam_dev_pw
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U himam -d himam"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      # Test-only credentials matching the postgres service container above.
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: '5432'
+      DATABASE_NAME: himam
+      DATABASE_USERNAME: himam
+      DATABASE_PASSWORD: himam_dev_pw
+      DATABASE_SSL: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: cms/package-lock.json
+
+      - name: Install dependencies
+        run: npm --prefix cms ci
+
+      - name: API tests (node:test against a booted Strapi)
+        run: npm --prefix cms run test:api
+
+  e2e:
+    name: E2E — Playwright contact-form flow
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: himam
+          POSTGRES_USER: himam
+          POSTGRES_PASSWORD: himam_dev_pw
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U himam -d himam"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      # Consumed by the CMS web server Playwright boots (playwright.config.ts).
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: '5432'
+      DATABASE_NAME: himam
+      DATABASE_USERNAME: himam
+      DATABASE_PASSWORD: himam_dev_pw
+      DATABASE_SSL: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Install CMS dependencies
+        run: npm --prefix cms ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Chromium
+        run: npm --prefix frontend exec playwright -- install --with-deps chromium
+
+      - name: Run e2e tests (boots Strapi + Vite, tests the real stack)
+        run: npm --prefix frontend run e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+          retention-days: 7

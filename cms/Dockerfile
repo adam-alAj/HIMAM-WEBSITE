@@ -1,32 +1,25 @@
-# Optional containerized deployment of the Strapi CMS.
-# Used by the commented-out `cms` service in ../docker-compose.yml.
-# Requires a cms/.env file with DATABASE_* pointing at the compose `db` service.
+# Strapi v5 production image (official multi-stage pattern).
+# Builds the admin, prunes dev deps, and runs the server in production mode.
+# Used by the CD pipeline (GHCR image → Render web service) and locally via
+# `docker build`.
 
-# ---- Base ----
-FROM node:22-alpine AS base
+FROM node:22-alpine AS build
 WORKDIR /app
-ENV NODE_ENV=production
-
-# ---- Dependencies ----
-FROM base AS deps
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
-
-# ---- Build ----
-FROM base AS build
+# Install deps first so the layer cache survives source changes.
 COPY package.json package-lock.json ./
 RUN npm ci
+# Copy the app and build the admin bundle.
 COPY . .
 RUN npm run build
+# Drop dev dependencies — the production image only needs runtime deps.
+RUN npm prune --omit=dev
 
-# ---- Runtime ----
-FROM base AS runtime
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/config ./config
-COPY --from=build /app/src ./src
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/tsconfig.json ./tsconfig.json
-COPY --from=build /app/public ./public
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+# A non-root user is good practice and required by some hosts (e.g. Render).
+RUN addgroup -S app && adduser -S app -G app
+COPY --from=build --chown=app:app /app ./
+USER app
 EXPOSE 1337
 CMD ["npm", "run", "start"]

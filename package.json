@@ -9,6 +9,9 @@
     "build:frontend": "npm --prefix frontend run build",
     "build:cms": "npm --prefix cms run build",
     "db:up": "docker compose up -d db",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "test:frontend": "npm --prefix frontend test",
+    "test:api": "npm --prefix cms run test:api",
+    "e2e": "npm --prefix frontend run e2e"
   }
 }

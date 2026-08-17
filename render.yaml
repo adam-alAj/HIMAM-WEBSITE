@@ -1,0 +1,61 @@
+# Render Blueprint — the "desired state" for the CMS backend (Render's infra
+# as code). Render watches this file; `render blueprint apply` provisions or
+# reconciles the services below. The CD pipeline triggers deploys via the
+# service's Deploy Hook (docs/deployment.md).
+#
+# Apply once (Render dashboard → Blueprints, or `render blueprint apply`),
+# then set the secret env vars (ADMIN_JWT_SECRET, JWT_SECRET, APP_KEYS,
+# …) in the Render dashboard. The Postgres DATABASE_URL is wired
+# automatically.
+
+databases:
+  - name: himam-postgres
+    plan: free
+    databaseName: himam
+    user: himam
+
+services:
+  - type: web
+    name: himam-cms
+    runtime: image
+    plan: free
+    image:
+      # Pushed by the CD pipeline (ghcr.io/<owner>/<repo>/cms:<sha>).
+      # Keep the repo private and add a Registry Credential (a fine-grained
+      # PAT) in Render → your account → settings so Render can pull it.
+      url: ghcr.io/himam/himam-website/cms:latest
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: '1337'
+      - key: DATABASE_URL
+        fromDatabase:
+          name: himam-postgres
+          property: connectionString
+      - key: SEED_DEMO_CONTENT
+        value: 'false'
+      # Required Strapi secrets — set in the Render dashboard (never here).
+      - key: APP_KEYS
+        sync: false
+      - key: API_TOKEN_SALT
+        sync: false
+      - key: ADMIN_JWT_SECRET
+        sync: false
+      - key: TRANSFER_TOKEN_SALT
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      # Contact form email notification (optional) — see cms/.env.example.
+      - key: CONTACT_NOTIFY_EMAIL
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: EMAIL_PROVIDER_API_KEY
+        sync: false
+    healthCheckPath: /api/services
+    autoDeploy: false

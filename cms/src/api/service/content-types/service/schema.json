@@ -1,0 +1,78 @@
+{
+  "kind": "collectionType",
+  "collectionName": "services",
+  "info": {
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "Service",
+    "description": "A service offering published on the marketing site. Content is edited in the Strapi admin by non-technical team members and rendered by the React frontend."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "shortDescription": {
+      "type": "text",
+      "required": true,
+      "maxLength": 220,
+      "description": "Card teaser shown on the Services page grid."
+    },
+    "longDescription": {
+      "type": "blocks",
+      "required": true,
+      "description": "Full service copy, rendered in the expandable detail on the Services page."
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "monitor",
+        "phone",
+        "database",
+        "bot",
+        "code",
+        "layers",
+        "shield",
+        "globe",
+        "users",
+        "message-square",
+        "search",
+        "calendar",
+        "clock",
+        "send",
+        "mail",
+        "map-pin"
+      ],
+      "required": true,
+      "default": "layers",
+      "description": "Icon reference — must match the frontend Icon component's icon names."
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "service.feature",
+      "required": true,
+      "min": 1,
+      "description": "Key features, shown as a checklist on the service card."
+    },
+    "startingFrom": {
+      "type": "string",
+      "required": false,
+      "description": "Optional price or engagement type, e.g. \"From $18,000\" or \"Fixed-scope engagement\"."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order on the Services page (ascending)."
+    }
+  }
+}

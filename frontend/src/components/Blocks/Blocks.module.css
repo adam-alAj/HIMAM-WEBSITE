@@ -1,0 +1,94 @@
+/* Blocks rich text — long-form editorial content from the CMS.
+ * Tokens only (design-system/MASTER.md §17). */
+
+.blocks > * + * {
+  margin-top: var(--space-4);
+}
+
+.blocks h2 {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+  margin-top: var(--space-8);
+}
+
+.blocks h3 {
+  font-size: var(--text-h4);
+  line-height: var(--text-h4-line);
+  margin-top: var(--space-6);
+}
+
+.blocks h4,
+.blocks h5,
+.blocks h6 {
+  font-size: var(--text-h5);
+  line-height: var(--text-h5-line);
+  margin-top: var(--space-5);
+}
+
+.blocks p {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+}
+
+.blocks ul,
+.blocks ol {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.blocks li {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+}
+
+.blocks li::marker {
+  color: var(--color-blue-600);
+}
+
+.blocks blockquote {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-blue-50);
+  border-left: 3px solid var(--color-blue-300);
+  border-radius: var(--radius-md);
+}
+
+.blocks blockquote p {
+  margin: 0;
+}
+
+.codeBlock {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-blue-950);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  line-height: var(--text-code-line);
+}
+
+.codeBlock code {
+  font-family: var(--font-mono);
+}
+
+.inlineCode {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-blue-100);
+  color: var(--color-blue-800);
+  padding: 0.125em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.figure {
+  margin: 0;
+}
+
+.figure img {
+  border-radius: var(--radius-lg);
+  border: var(--border-width) solid var(--color-border);
+}

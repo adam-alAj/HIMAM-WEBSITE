@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_service_features",
+  "info": {
+    "displayName": "Feature",
+    "icon": "check",
+    "description": "A single key feature of a service, rendered as a checklist item."
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

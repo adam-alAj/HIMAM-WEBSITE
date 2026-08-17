@@ -5,7 +5,8 @@ content types Phase 2 will create in Strapi. The frontend should be built agains
 shapes; the CMS should not rename or restructure them without updating this doc and the
 frontend in the same PR.
 
-Status: **planned** — no content types exist yet (Phase 1 is the running skeleton only).
+Status: **in progress** — the `service` content type exists (schema, seed, and public
+API are live; the React Services page consumes it). Remaining types are planned.
 
 ## Conventions
 
@@ -48,16 +49,27 @@ API: `GET /api/blog-posts` (list) and `GET /api/blog-posts/:slug` (detail via
 
 ### 3. `service` — offerings (apps, websites, systems, AI chatbots)
 
-| Field     | Type   | Notes                          |
-| --------- | ------ | ------------------------------ |
-| name      | string | e.g. "Custom Apps"             |
-| slug      | uid    | unique                         |
-| shortDescription | text | card teaser            |
-| description | blocks | full service copy            |
-| icon      | media  | optional                       |
-| order     | integer | manual sort on Services page  |
+**Live.** Schema: `cms/src/api/service/content-types/service/schema.json`.
+Seed: `cms/src/seed/index.ts` (four core services, idempotent, published on first boot).
 
-API: `GET /api/services?sort=order:asc`.
+| Field            | Type          | Notes                                              |
+| ---------------- | ------------- | -------------------------------------------------- |
+| title            | string        | required                                           |
+| slug             | uid           | unique, from title                                 |
+| shortDescription | text          | required, ≤ 220 chars — card teaser                |
+| longDescription  | blocks        | required — full service copy (rendered by frontend `Blocks`) |
+| icon             | enumeration   | required — must match the frontend Icon set (see schema) |
+| features         | component `service.feature` | required, repeatable, min 1 — checklist items |
+| startingFrom     | string        | optional — price or engagement type ("From $18,000") |
+| order            | integer       | manual sort on Services page (ascending)           |
+
+Component `service.feature` (`cms/src/components/service/feature.json`):
+`text` (string, required).
+
+API: `GET /api/services?sort[0]=order:asc&populate=features` (list) and
+`GET /api/services?filters[slug][$eq]=<slug>&populate=features` (detail). Public
+role is scoped to `find`/`findOne` only — read-only, no auth required (see
+`cms/src/seed/index.ts`). Only published entries are returned.
 
 ### 4. `testimonial` — client quotes
 

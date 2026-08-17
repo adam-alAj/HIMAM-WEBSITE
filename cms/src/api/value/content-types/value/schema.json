@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "values",
+  "info": {
+    "singularName": "value",
+    "pluralName": "values",
+    "displayName": "Value",
+    "description": "A working principle shown in the \"How we work\" section of the About page. Edited in the Strapi admin by the team."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Short principle name, e.g. \"No hand-offs\"."
+    },
+    "text": {
+      "type": "text",
+      "required": true,
+      "description": "One or two sentences explaining the principle."
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "monitor",
+        "phone",
+        "database",
+        "bot",
+        "code",
+        "layers",
+        "shield",
+        "globe",
+        "users",
+        "message-square",
+        "search",
+        "calendar",
+        "clock",
+        "send",
+        "mail",
+        "map-pin"
+      ],
+      "required": true,
+      "default": "layers",
+      "description": "Icon reference — must match the frontend Icon component's icon names."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order in the \"How we work\" section (ascending)."
+    }
+  }
+}

@@ -1,0 +1,256 @@
+/* About page layout — tokens only (design-system/MASTER.md §17). */
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+.hero {
+  max-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-blue-600);
+}
+
+.title {
+  font-size: var(--text-h1);
+  line-height: var(--text-h1-line);
+}
+
+.lead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 52ch;
+}
+
+.heroBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ *
+ * Section headers + story
+ * ------------------------------------------------------------------ */
+.sectionHead {
+  max-width: 44rem;
+  margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  margin-top: var(--space-2);
+}
+
+.sectionIntro {
+  margin-top: var(--space-3);
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 48ch;
+}
+
+.story {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.story p {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+}
+
+/* ------------------------------------------------------------------ *
+ * Founder cards
+ * ------------------------------------------------------------------ */
+.memberGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.memberCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  height: 100%;
+}
+
+.photo,
+.photoPlaceholder {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-2);
+}
+
+.photo {
+  object-fit: cover;
+  border: var(--border-width) solid var(--color-border);
+}
+
+.photoPlaceholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  font-weight: var(--weight-semibold);
+}
+
+.memberName {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+}
+
+.memberRole {
+  color: var(--color-text-muted);
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+}
+
+.focusBadge {
+  margin: var(--space-1) 0 var(--space-2);
+}
+
+.memberBio {
+  margin-top: var(--space-1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Value cards
+ * ------------------------------------------------------------------ */
+.valueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-6);
+}
+
+.valueCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  height: 100%;
+}
+
+.valueIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-blue-700);
+  margin-bottom: var(--space-1);
+}
+
+.valueTitle {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+}
+
+.valueText {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+}
+
+.emptyNote {
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * Skeleton + states
+ * ------------------------------------------------------------------ */
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.skeletonValue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  background: var(--color-blue-50);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-lg);
+}
+
+.statePanel {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-12) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.errorIcon {
+  color: var(--color-error);
+}
+
+.stateTitle {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+}
+
+.stateBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  max-width: 40ch;
+}
+
+/* ------------------------------------------------------------------ *
+ * Final CTA band (navy)
+ * ------------------------------------------------------------------ */
+.cta {
+  max-width: 40rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+}
+
+.ctaLead {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  max-width: 44ch;
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}

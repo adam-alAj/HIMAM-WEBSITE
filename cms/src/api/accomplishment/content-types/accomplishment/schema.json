@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "accomplishments",
+  "info": {
+    "singularName": "accomplishment",
+    "pluralName": "accomplishments",
+    "displayName": "Accomplishment",
+    "description": "A notable project or case study shown on the Accomplishments page — the problem, the build, and the outcome. Edited in the Strapi admin by the team."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "projectName": {
+      "type": "string",
+      "required": true,
+      "description": "Short project name, e.g. \"Dispatch portal rebuild\"."
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "projectName",
+      "required": true
+    },
+    "client": {
+      "type": "string",
+      "required": false,
+      "description": "Optional client name, e.g. \"Northwind Logistics\"."
+    },
+    "industry": {
+      "type": "string",
+      "required": false,
+      "description": "Optional industry, e.g. \"Logistics\"."
+    },
+    "year": {
+      "type": "string",
+      "required": false,
+      "description": "Optional delivery year, e.g. \"2024\"."
+    },
+    "metric": {
+      "type": "string",
+      "required": false,
+      "description": "Headline result shown at the top of the card, e.g. \"88% daily active field staff (up from 31%)\"."
+    },
+    "problem": {
+      "type": "blocks",
+      "required": true,
+      "description": "The problem the client came with."
+    },
+    "solution": {
+      "type": "blocks",
+      "required": true,
+      "description": "What we built and how it worked."
+    },
+    "outcome": {
+      "type": "blocks",
+      "required": true,
+      "description": "The result — specific numbers over vague claims."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order on the Accomplishments page (ascending)."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team_members",
+  "info": {
+    "singularName": "team-member",
+    "pluralName": "team-members",
+    "displayName": "Team Member",
+    "description": "A founding engineer shown on the About page. Bios are edited in the Strapi admin by the team and rendered by the React frontend."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Full name, e.g. \"Sana Qureshi\"."
+    },
+    "role": {
+      "type": "string",
+      "required": true,
+      "description": "Title, e.g. \"Co-founder & Frontend Engineer\"."
+    },
+    "focusArea": {
+      "type": "enumeration",
+      "enum": ["Frontend", "Backend", "AI", "Full-stack"],
+      "required": true,
+      "default": "Full-stack",
+      "description": "Primary discipline, shown as a badge on the About page."
+    },
+    "bio": {
+      "type": "blocks",
+      "required": true,
+      "description": "Short, specific bio — background, track record, and what they own at Himam."
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional headshot. The frontend shows an initials placeholder until one is uploaded."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order on the About page (ascending)."
+    }
+  }
+}

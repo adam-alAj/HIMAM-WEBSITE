@@ -511,6 +511,168 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAccomplishmentAccomplishment
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'accomplishments';
+  info: {
+    description: 'A notable project or case study shown on the Accomplishments page — the problem, the build, and the outcome. Edited in the Strapi admin by the team.';
+    displayName: 'Accomplishment';
+    pluralName: 'accomplishments';
+    singularName: 'accomplishment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    client: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    industry: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::accomplishment.accomplishment'
+    > &
+      Schema.Attribute.Private;
+    metric: Schema.Attribute.String;
+    order: Schema.Attribute.Integer;
+    outcome: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    problem: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    projectName: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'projectName'> & Schema.Attribute.Required;
+    solution: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    year: Schema.Attribute.String;
+  };
+}
+
+export interface ApiMetricMetric extends Struct.CollectionTypeSchema {
+  collectionName: 'metrics';
+  info: {
+    description: 'A headline number for the Accomplishments metrics band (e.g. \"40+ Products shipped\"). Edited in the Strapi admin by the team.';
+    displayName: 'Metric';
+    pluralName: 'metrics';
+    singularName: 'metric';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::metric.metric'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    value: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiTeamMemberTeamMember
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'team_members';
+  info: {
+    description: 'A founding engineer shown on the About page. Bios are edited in the Strapi admin by the team and rendered by the React frontend.';
+    displayName: 'Team Member';
+    pluralName: 'team-members';
+    singularName: 'team-member';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    bio: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    focusArea: Schema.Attribute.Enumeration<
+      ['Frontend', 'Backend', 'AI', 'Full-stack']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Full-stack'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::team-member.team-member'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer;
+    photo: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    role: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiValueValue extends Struct.CollectionTypeSchema {
+  collectionName: 'values';
+  info: {
+    description: 'A working principle shown in the \"How we work\" section of the About page. Edited in the Strapi admin by the team.';
+    displayName: 'Value';
+    pluralName: 'values';
+    singularName: 'value';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    icon: Schema.Attribute.Enumeration<
+      [
+        'monitor',
+        'phone',
+        'database',
+        'bot',
+        'code',
+        'layers',
+        'shield',
+        'globe',
+        'users',
+        'message-square',
+        'search',
+        'calendar',
+        'clock',
+        'send',
+        'mail',
+        'map-pin',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'layers'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::value.value'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    text: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1022,7 +1184,11 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::accomplishment.accomplishment': ApiAccomplishmentAccomplishment;
+      'api::metric.metric': ApiMetricMetric;
       'api::service.service': ApiServiceService;
+      'api::team-member.team-member': ApiTeamMemberTeamMember;
+      'api::value.value': ApiValueValue;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

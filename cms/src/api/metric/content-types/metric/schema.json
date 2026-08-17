@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "metrics",
+  "info": {
+    "singularName": "metric",
+    "pluralName": "metrics",
+    "displayName": "Metric",
+    "description": "A headline number for the Accomplishments metrics band (e.g. \"40+ Products shipped\"). Edited in the Strapi admin by the team."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "required": true,
+      "description": "The number, e.g. \"40+\"."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "What the number describes, e.g. \"Products shipped\"."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order in the metrics band (ascending)."
+    }
+  }
+}

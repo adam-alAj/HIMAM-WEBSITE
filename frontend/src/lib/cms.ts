@@ -165,3 +165,124 @@ export async function fetchServiceBySlug(slug: string): Promise<Service | null> 
   const { data } = await get<StrapiListResponse<Service>>(`/services?${params}`)
   return data[0] ?? null
 }
+
+/* ------------------------------------------------------------------ *
+ * Team members + values (About page)
+ * ------------------------------------------------------------------ */
+
+/** Strapi media file (populated for the optional `photo` field). */
+export interface MediaFile {
+  url: string
+  alternativeText: string | null
+  name: string
+  width: number | null
+  height: number | null
+}
+
+export type TeamFocusArea = 'Frontend' | 'Backend' | 'AI' | 'Full-stack'
+
+export interface TeamMember {
+  id: number
+  documentId: string
+  name: string
+  role: string
+  focusArea: TeamFocusArea
+  bio: Blocks
+  photo: MediaFile | null
+  order: number | null
+  publishedAt: string
+}
+
+/** Working principle shown in the About "How we work" section. */
+export interface StudioValue {
+  id: number
+  documentId: string
+  title: string
+  text: string
+  icon: ServiceIconName
+  order: number | null
+  publishedAt: string
+}
+
+/**
+ * All published team members, sorted by the CMS `order` field.
+ * Endpoint: GET /api/team-members?populate=photo&sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchTeamMembers(): Promise<TeamMember[]> {
+  const params = new URLSearchParams({
+    populate: 'photo',
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<TeamMember>>(`/team-members?${params}`)
+  return data
+}
+
+/**
+ * All published values, sorted by the CMS `order` field.
+ * Endpoint: GET /api/values?sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchValues(): Promise<StudioValue[]> {
+  const params = new URLSearchParams({
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<StudioValue>>(`/values?${params}`)
+  return data
+}
+
+/* ------------------------------------------------------------------ *
+ * Accomplishments + metrics (Accomplishments page)
+ * ------------------------------------------------------------------ */
+
+export interface Accomplishment {
+  id: number
+  documentId: string
+  projectName: string
+  slug: string
+  client: string | null
+  industry: string | null
+  year: string | null
+  /** Headline result shown at the top of the card, e.g. "88% daily active field staff". */
+  metric: string | null
+  problem: Blocks
+  solution: Blocks
+  outcome: Blocks
+  order: number | null
+  publishedAt: string
+}
+
+export interface Metric {
+  id: number
+  documentId: string
+  value: string
+  label: string
+  order: number | null
+  publishedAt: string
+}
+
+/**
+ * All published case studies, sorted by the CMS `order` field.
+ * Endpoint: GET /api/accomplishments?sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchAccomplishments(): Promise<Accomplishment[]> {
+  const params = new URLSearchParams({
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<Accomplishment>>(`/accomplishments?${params}`)
+  return data
+}
+
+/**
+ * All published metrics, sorted by the CMS `order` field.
+ * Endpoint: GET /api/metrics?sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchMetrics(): Promise<Metric[]> {
+  const params = new URLSearchParams({
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<Metric>>(`/metrics?${params}`)
+  return data
+}

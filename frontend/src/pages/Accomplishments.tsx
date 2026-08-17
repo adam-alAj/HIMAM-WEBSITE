@@ -13,6 +13,7 @@ import {
   type Blocks as BlocksValue,
   type Metric,
 } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Accomplishments.module.css'
 
@@ -121,6 +122,14 @@ export default function Accomplishments() {
   useEffect(() => {
     void load()
   }, [load])
+
+  useEffect(() => {
+    setPageMeta({
+      title: 'Accomplishments — Himam',
+      description:
+        'Case studies and outcomes from Himam’s projects — dispatch portals, AI assistants, integrations, and patient intake — with the numbers to back them up.',
+    })
+  }, [])
 
   return (
     <>

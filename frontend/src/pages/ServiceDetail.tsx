@@ -8,6 +8,7 @@ import { iconPaths } from '../components/Icon/icons'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { fetchServiceBySlug, type Service } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './ServiceDetail.module.css'
 
@@ -72,6 +73,15 @@ export default function ServiceDetail() {
   useEffect(() => {
     void load()
   }, [load])
+
+  // Dynamic meta once the service resolves (title + short description).
+  useEffect(() => {
+    if (state.status !== 'ready' || !state.service) return
+    setPageMeta({
+      title: `${state.service.title} — Himam`,
+      description: state.service.shortDescription,
+    })
+  }, [state])
 
   if (state.status === 'loading') return <DetailSkeleton />
 

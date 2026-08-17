@@ -6,6 +6,7 @@ import { Icon } from '../components/Icon/Icon'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { fetchFaqs, type Faq, type FaqCategory } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Faq.module.css'
 
@@ -62,6 +63,14 @@ export default function Faq() {
   useEffect(() => {
     void load()
   }, [load])
+
+  useEffect(() => {
+    setPageMeta({
+      title: 'FAQ — Himam',
+      description:
+        'Pricing, process, technology, and support questions answered — the things buyers ask us before they start a project.',
+    })
+  }, [])
 
   /** FAQs grouped by category, preserving each category's `order` sort. */
   const grouped = useMemo(() => {

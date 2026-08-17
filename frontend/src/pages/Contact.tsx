@@ -16,6 +16,7 @@ import {
   submitContactSubmission,
   type Service,
 } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Contact.module.css'
 
@@ -106,6 +107,14 @@ export default function Contact() {
     return () => {
       cancelled = true
     }
+  }, [])
+
+  useEffect(() => {
+    setPageMeta({
+      title: 'Contact — Himam',
+      description:
+        'Start a project with Himam — tell us what you’re working on and we’ll reply within one business day.',
+    })
   }, [])
 
   const handleChange =

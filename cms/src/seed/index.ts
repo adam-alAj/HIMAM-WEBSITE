@@ -764,6 +764,125 @@ export const blogPostSeeds: BlogPostSeed[] = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * Legal pages — starting templates, not final legal advice
+ * ------------------------------------------------------------------ */
+
+interface LegalPageSeed {
+  title: string;
+  slug: string;
+  body: Blocks;
+  lastUpdated: string;
+}
+
+export const legalPageSeeds: LegalPageSeed[] = [
+  {
+    title: 'Privacy Policy',
+    slug: 'privacy-policy',
+    body: [
+      heading('Template notice', 2),
+      p(
+        'This policy is a starting template, not legal advice. It will be reviewed by a lawyer before launch; until then, treat it as a draft.'
+      ),
+      heading('1. Who we are', 2),
+      p(
+        'Himam is a software engineering studio. This policy explains what we collect through this website, why we collect it, and what we do with it.'
+      ),
+      heading('2. What we collect', 2),
+      p(
+        'Information you send us through the Contact form: your name, your email address, optionally your company, the service you are interested in, an optional budget range, and the message itself. We also record the page you came from so we know which part of the site led to the enquiry.'
+      ),
+      p(
+        'Technical information collected automatically: standard web analytics (pages visited, approximate region, device type, referring site) and any cookies described in section 4.'
+      ),
+      heading('3. Why we collect it', 2),
+      list([
+        'To reply to your enquiry and, if you ask, to follow up about it',
+        'To understand which services and pages are useful, so we can improve the site',
+        'To keep the site secure and prevent spam or abuse — including the honeypot and rate limits on the contact form',
+      ]),
+      heading('4. Cookies and analytics', 2),
+      p(
+        'We use a privacy-respecting analytics tool that does not rely on cross-site tracking cookies. Where cookies are used, they are limited to what is strictly necessary for the site to function or for the analytics tool itself, and we ask for consent before any non-essential cookies are set.'
+      ),
+      heading('5. Third parties', 2),
+      p(
+        'We use a small number of third-party services to run the site: hosting and infrastructure providers, the CMS platform that stores site content, and an email provider for notifications and replies. Each provider receives only the data needed to provide its service and is contractually bound not to use it for anything else. We do not sell, rent, or trade personal data.'
+      ),
+      heading('6. How long we keep it', 2),
+      p(
+        'Contact submissions are kept until the enquiry is resolved and then deleted after 12 months — unless you become a client, in which case the details are kept as part of the engagement record.'
+      ),
+      heading('7. Your rights', 2),
+      p(
+        'You can ask us at any time for a copy of the data we hold about you, ask us to correct or delete it, or object to how it is used. Email us at hello@himam.dev and we will respond within 30 days.'
+      ),
+      heading('8. Changes', 2),
+      p(
+        'If this policy changes materially, we will update the date at the top of this page and, where required, notify you by email.'
+      ),
+      heading('9. Contact', 2),
+      p('Questions about this policy: hello@himam.dev.'),
+    ],
+    lastUpdated: '2026-08-17',
+  },
+  {
+    title: 'Terms of Service',
+    slug: 'terms-of-service',
+    body: [
+      heading('Template notice', 2),
+      p(
+        'These terms are a starting template, not legal advice. They will be reviewed by a lawyer before launch; until then, treat them as a draft.'
+      ),
+      heading('1. About these terms', 2),
+      p(
+        'These terms govern the use of this website and the services Himam provides. By using the site or engaging us, you agree to them.'
+      ),
+      heading('2. The services', 2),
+      p(
+        'Himam provides software engineering services: custom applications, website development, business systems and integrations, and AI chatbots. Each engagement is governed by a written proposal and agreement that defines scope, deliverables, price, and timeline. Where these terms and the agreement conflict, the agreement wins.'
+      ),
+      heading('3. Proposals and pricing', 2),
+      p(
+        'Proposals are valid for 30 days. Quoted prices are fixed for the agreed scope. Changes to scope after the proposal is signed are handled as change requests with a written estimate.'
+      ),
+      heading('4. Payments', 2),
+      p(
+        'Invoices are payable within 14 days unless the agreement says otherwise. On fixed-price engagements we invoice a deposit (typically 30–50%) before work starts, with the balance due at milestones or on delivery as agreed.'
+      ),
+      heading('5. Client responsibilities', 2),
+      list([
+        'Provide access to the systems and materials needed for the work, on time',
+        'Review and respond to deliverables within the response windows in the agreement',
+        'Ensure you have the right to use any third-party content or data you provide',
+      ]),
+      heading('6. Intellectual property', 2),
+      p(
+        'Once payment is received in full, you own the work we create for you: source code, designs, documentation, and content. We retain the right to use our general skills, and to reference the work in our portfolio unless the agreement says otherwise.'
+      ),
+      heading('7. Confidentiality', 2),
+      p(
+        'We keep your business information confidential and only use it to perform the engagement. On request, we will sign a mutual non-disclosure agreement before work starts.'
+      ),
+      heading('8. Warranties and liability', 2),
+      p(
+        'We deliver work that conforms to the agreed specification. Our total liability under any engagement is limited to the amount you paid us for that engagement, and we are not liable for indirect or consequential losses. Nothing in these terms limits liability that cannot be limited by law.'
+      ),
+      heading('9. Termination', 2),
+      p(
+        'Either party may end an engagement with written notice. You pay for work completed up to the termination date, and we deliver everything produced so far.'
+      ),
+      heading('10. Governing law', 2),
+      p(
+        'These terms are governed by the laws of [jurisdiction]. Any disputes are subject to the exclusive jurisdiction of its courts.'
+      ),
+      heading('11. Contact', 2),
+      p('Questions about these terms: hello@himam.dev.'),
+    ],
+    lastUpdated: '2026-08-17',
+  },
+];
+
+/* ------------------------------------------------------------------ *
  * Seeding
  * ------------------------------------------------------------------ */
 
@@ -891,6 +1010,7 @@ export async function seedAll(strapi: Core.Strapi): Promise<void> {
   await seedTestimonials(strapi);
   await seedCollection(strapi, 'api::faq.faq', 'faqs', faqSeeds);
   await seedBlogPosts(strapi);
+  await seedCollection(strapi, 'api::legal-page.legal-page', 'legal pages', legalPageSeeds);
 }
 
 /* ------------------------------------------------------------------ *
@@ -912,6 +1032,7 @@ const PUBLIC_APIS = [
   'testimonial',
   'faq',
   'blog-post',
+  'legal-page',
 ] as const;
 
 /**

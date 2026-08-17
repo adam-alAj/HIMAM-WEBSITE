@@ -182,6 +182,25 @@ Support (2), published on first boot.
 
 API: `GET /api/faqs?sort[0]=order:asc`.
 
+### 10. `legal-page` — Privacy Policy / Terms of Service
+
+**Live.** Schema: `cms/src/api/legal-page/content-types/legal-page/schema.json`.
+Seed: two entries — Privacy Policy (`privacy-policy`) and Terms of Service
+(`terms-of-service`), published on first boot. The seeded copy is a starting
+template, not final legal advice; the frontend flags this in the page hero and
+it should be reviewed by a lawyer before launch.
+
+| Field        | Type   | Notes                                          |
+| ------------ | ------ | ---------------------------------------------- |
+| title        | string | required                                       |
+| slug         | uid    | required, unique — `privacy-policy` / `terms-of-service` |
+| body         | blocks | required — the policy/terms document           |
+| lastUpdated  | date   | required — shown as "Last updated" on the page |
+
+API: `GET /api/legal-pages?filters[slug][$eq]=<slug>&pagination[pageSize]=1`.
+Routes: `/privacy` and `/terms` (both render the same page component with the
+slug as a prop).
+
 ## Contact submissions (user-generated — never seeded)
 
 **Live.** Schema: `cms/src/api/contact-submission/content-types/contact-submission/schema.json`.

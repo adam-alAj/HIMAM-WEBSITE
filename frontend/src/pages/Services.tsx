@@ -5,6 +5,7 @@ import { Section } from '../components/Section/Section'
 import { ServiceCard } from '../components/ServiceCard/ServiceCard'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { fetchServices, type Service } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Services.module.css'
 
@@ -55,6 +56,14 @@ export default function Services() {
     void load()
   }, [load])
 
+  useEffect(() => {
+    setPageMeta({
+      title: 'Services — Himam',
+      description:
+        'Custom applications, website development, business systems, and AI chatbots — delivered end to end by a senior team of three engineers.',
+    })
+  }, [])
+
   return (
     <>
       {/* Hero */}
@@ -72,6 +81,7 @@ export default function Services() {
 
       {/* Grid */}
       <Section background="subtle" padding="lg">
+        <h2 className="sr-only">Our services</h2>
         {state.status === 'loading' && <GridSkeleton />}
 
         {state.status === 'error' && (

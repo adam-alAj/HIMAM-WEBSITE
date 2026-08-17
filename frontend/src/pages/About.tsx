@@ -13,6 +13,7 @@ import {
   type StudioValue,
   type TeamMember,
 } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './About.module.css'
 
@@ -117,6 +118,14 @@ export default function About() {
   useEffect(() => {
     void load()
   }, [load])
+
+  useEffect(() => {
+    setPageMeta({
+      title: 'About Us — Himam',
+      description:
+        'The three engineers behind Himam — who we are, how we work, and the principles we don’t bend.',
+    })
+  }, [])
 
   return (
     <>

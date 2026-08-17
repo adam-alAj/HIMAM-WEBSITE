@@ -477,3 +477,31 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
   const { data } = await get<StrapiListResponse<BlogPost>>(`/blog-posts?${query}`)
   return data[0] ?? null
 }
+
+/* ------------------------------------------------------------------ *
+ * Legal pages (Privacy Policy, Terms of Service)
+ * ------------------------------------------------------------------ */
+
+export interface LegalPage {
+  id: number
+  documentId: string
+  title: string
+  slug: string
+  body: Blocks
+  /** ISO date (yyyy-mm-dd) shown as "Last updated". */
+  lastUpdated: string
+  publishedAt: string
+}
+
+/**
+ * A single published legal page by slug, or null when it doesn't resolve.
+ * Endpoint: GET /api/legal-pages?filters[slug][$eq]=<slug>&pagination[pageSize]=1
+ */
+export async function fetchLegalPageBySlug(slug: string): Promise<LegalPage | null> {
+  const params = new URLSearchParams({
+    'filters[slug][$eq]': slug,
+    'pagination[pageSize]': '1',
+  })
+  const { data } = await get<StrapiListResponse<LegalPage>>(`/legal-pages?${params}`)
+  return data[0] ?? null
+}

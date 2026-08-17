@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { Badge } from '../components/Badge/Badge'
 import { Button } from '../components/Button/Button'
 import { Card } from '../components/Card/Card'
 import { Icon, type IconName } from '../components/Icon/Icon'
 import { Section } from '../components/Section/Section'
-import { siteEmail } from '../lib/site'
+import { setPageMeta } from '../lib/seo'
+import { siteEmail, siteTagline } from '../lib/site'
 import styles from './Home.module.css'
 
 /* ------------------------------------------------------------------ *
@@ -81,6 +83,13 @@ const testimonials: { quote: string; author: string; role: string }[] = [
  * ------------------------------------------------------------------ */
 
 export default function Home() {
+  useEffect(() => {
+    setPageMeta({
+      title: 'Himam — Software Engineering Studio',
+      description: siteTagline,
+    })
+  }, [])
+
   return (
     <>
       {/* 1. Hero */}

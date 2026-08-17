@@ -7,6 +7,7 @@ import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
 import Faq from './pages/Faq'
 import Home from './pages/Home'
+import Legal from './pages/Legal'
 import PagePlaceholder from './pages/PagePlaceholder'
 import ServiceDetail from './pages/ServiceDetail'
 import Services from './pages/Services'
@@ -33,6 +34,8 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Legal slug="privacy-policy" />} />
+          <Route path="/terms" element={<Legal slug="terms-of-service" />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="*" element={<PagePlaceholder />} />
         </Route>

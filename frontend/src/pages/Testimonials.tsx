@@ -7,6 +7,7 @@ import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { StarRating } from '../components/StarRating/StarRating'
 import { fetchTestimonials, type Testimonial } from '../lib/cms'
+import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Testimonials.module.css'
 
@@ -107,6 +108,14 @@ export default function Testimonials() {
   useEffect(() => {
     void load()
   }, [load])
+
+  useEffect(() => {
+    setPageMeta({
+      title: 'Testimonials — Himam',
+      description:
+        'What clients say about working with Himam — reviews by service, from custom applications to AI chatbots.',
+    })
+  }, [])
 
   /** Filter tabs: distinct services present in the data, in display order. */
   const tabs = useMemo(() => {

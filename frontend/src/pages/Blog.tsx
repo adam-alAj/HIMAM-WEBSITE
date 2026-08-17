@@ -104,6 +104,7 @@ export default function Blog() {
 
       {/* Filter + grid */}
       <Section background="subtle" padding="lg">
+        <h2 className="sr-only">All posts</h2>
         <div className={styles.tabs} role="group" aria-label="Filter posts by category">
           <button
             type="button"

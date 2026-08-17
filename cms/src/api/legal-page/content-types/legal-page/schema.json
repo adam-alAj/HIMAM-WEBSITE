@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "legal_pages",
+  "info": {
+    "singularName": "legal-page",
+    "pluralName": "legal-pages",
+    "displayName": "Legal Page",
+    "description": "A legal document (Privacy Policy, Terms of Service) rendered on the site. Edited in the Strapi admin by the team — no code deploy. Seeded with starting templates for a lawyer to review."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Page title, e.g. \"Privacy Policy\"."
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "description": "URL slug, e.g. \"privacy-policy\" or \"terms-of-service\" — the frontend routes on this."
+    },
+    "body": {
+      "type": "blocks",
+      "required": true,
+      "description": "The document itself. Start with a template notice until a lawyer reviews it."
+    },
+    "lastUpdated": {
+      "type": "date",
+      "required": true,
+      "description": "Shown as \"Last updated\" at the top of the page. Update whenever the document changes."
+    }
+  }
+}

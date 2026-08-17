@@ -5,9 +5,10 @@ content types Phase 2 will create in Strapi. The frontend should be built agains
 shapes; the CMS should not rename or restructure them without updating this doc and the
 frontend in the same PR.
 
-Status: **in progress** — `service`, `team-member`, `accomplishment`, `metric`, and
-`value` exist (schemas, seeds, and public APIs are live; the Services, About, and
-Accomplishments pages consume them). Remaining types are planned.
+Status: **in progress** — `service`, `team-member`, `accomplishment`, `metric`,
+`value`, `testimonial`, and `faq` exist (schemas, seeds, and public APIs are live;
+the Services, About, Accomplishments, Testimonials, and FAQ pages consume them).
+Remaining types are planned.
 
 ## Conventions
 
@@ -135,32 +136,44 @@ Seed: four working principles, published on first boot.
 
 API: `GET /api/values?sort[0]=order:asc`.
 
-All five live content APIs are scoped to `find`/`findOne` on the public role —
-read-only, no auth required (see `cms/src/seed/index.ts`). Only published entries
-are returned.
-
 ### 8. `testimonial` — client quotes
 
-| Field      | Type   | Notes                 |
-| ---------- | ------ | --------------------- |
-| quote      | text   |                       |
-| authorName | string |                       |
-| authorRole | string | e.g. "CTO, Acme Corp" |
-| avatar     | media  | optional              |
-| featured   | boolean | show on home page    |
+**Live.** Schema: `cms/src/api/testimonial/content-types/testimonial/schema.json`.
+Seed: six testimonials, each linked to a seeded Service by slug, published on
+first boot.
 
-API: `GET /api/testimonials?filters[featured][$eq]=true`.
+| Field      | Type     | Notes                                          |
+| ---------- | -------- | ---------------------------------------------- |
+| clientName | string   | required                                       |
+| clientRole | string   | required — e.g. "VP of Product, Northwind"     |
+| quote      | text     | required — specific results over vague praise  |
+| photo      | media    | optional avatar; initials placeholder until uploaded |
+| rating     | integer  | optional, 1–5 (default 5)                      |
+| service    | relation | manyToOne → `api::service.service` (optional)  |
+| order      | integer  | manual sort (ascending)                        |
 
-### 9. `faq` — single question/answer pairs
+Inverse relation on `service`: `testimonials` (oneToMany, mappedBy `service`).
 
-| Field    | Type   | Notes                          |
-| -------- | ------ | ------------------------------ |
-| question | string |                                |
-| answer   | blocks |                                |
-| category | enum   | optional grouping              |
-| order    | integer | manual sort                   |
+API: `GET /api/testimonials?populate=service&sort[0]=order:asc`.
 
-API: `GET /api/faqs?sort=order:asc`.
+### 9. `faq` — question/answer pairs, grouped by category
+
+**Live.** Schema: `cms/src/api/faq/content-types/faq/schema.json`.
+Seed: twelve FAQs across Pricing (3), Process (3), Technology (4), and
+Support (2), published on first boot.
+
+| Field    | Type   | Notes                                    |
+| -------- | ------ | ---------------------------------------- |
+| question | string | required                                 |
+| answer   | blocks | required — rich text                    |
+| category | enum   | required — Pricing / Process / Technology / Support |
+| order    | integer | manual sort within category (ascending) |
+
+API: `GET /api/faqs?sort[0]=order:asc`.
+
+All seven live content APIs are scoped to `find`/`findOne` on the public role —
+read-only, no auth required (see `cms/src/seed/index.ts`). Only published entries
+are returned.
 
 ## Components (reusable, not routable)
 

@@ -286,3 +286,61 @@ export async function fetchMetrics(): Promise<Metric[]> {
   const { data } = await get<StrapiListResponse<Metric>>(`/metrics?${params}`)
   return data
 }
+
+/* ------------------------------------------------------------------ *
+ * Testimonials + FAQs
+ * ------------------------------------------------------------------ */
+
+export interface Testimonial {
+  id: number
+  documentId: string
+  clientName: string
+  clientRole: string
+  quote: string
+  photo: MediaFile | null
+  /** Optional star rating, 1–5. */
+  rating: number | null
+  /** The related Service (populated via `populate=service`), or null. */
+  service: Pick<Service, 'id' | 'documentId' | 'title' | 'slug'> | null
+  order: number | null
+  publishedAt: string
+}
+
+export type FaqCategory = 'Pricing' | 'Process' | 'Technology' | 'Support'
+
+export interface Faq {
+  id: number
+  documentId: string
+  question: string
+  answer: Blocks
+  category: FaqCategory
+  order: number | null
+  publishedAt: string
+}
+
+/**
+ * All published testimonials with their related service, sorted by `order`.
+ * Endpoint: GET /api/testimonials?populate=service&sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchTestimonials(): Promise<Testimonial[]> {
+  const params = new URLSearchParams({
+    populate: 'service',
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<Testimonial>>(`/testimonials?${params}`)
+  return data
+}
+
+/**
+ * All published FAQs, sorted by `order` (grouping by category happens on the page).
+ * Endpoint: GET /api/faqs?sort[0]=order:asc&pagination[pageSize]=100
+ */
+export async function fetchFaqs(): Promise<Faq[]> {
+  const params = new URLSearchParams({
+    'sort[0]': 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const { data } = await get<StrapiListResponse<Faq>>(`/faqs?${params}`)
+  return data
+}

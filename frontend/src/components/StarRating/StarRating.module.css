@@ -1,0 +1,15 @@
+/* Star rating — tokens only (design-system/MASTER.md §17). */
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
+.filled {
+  color: var(--color-blue-600);
+}
+
+.empty {
+  color: var(--color-blue-200);
+}

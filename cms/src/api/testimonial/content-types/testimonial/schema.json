@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "testimonials",
+  "info": {
+    "singularName": "testimonial",
+    "pluralName": "testimonials",
+    "displayName": "Testimonial",
+    "description": "A client quote shown on the Testimonials page. Linked to a Service so visitors see proof specific to the offering they're reading about. Edited in the Strapi admin by the team."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "clientName": {
+      "type": "string",
+      "required": true,
+      "description": "Client name, e.g. \"Dana Whitfield\"."
+    },
+    "clientRole": {
+      "type": "string",
+      "required": true,
+      "description": "Role and company, e.g. \"VP of Product, Northwind Logistics\"."
+    },
+    "quote": {
+      "type": "text",
+      "required": true,
+      "description": "The quote itself — specific results over vague praise."
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional avatar. The frontend shows an initials placeholder until one is uploaded."
+    },
+    "rating": {
+      "type": "integer",
+      "required": false,
+      "min": 1,
+      "max": 5,
+      "default": 5,
+      "description": "Optional star rating (1–5)."
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service",
+      "inversedBy": "testimonials",
+      "required": false,
+      "description": "The service this testimonial relates to. Used to filter the Testimonials page by offering."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order on the Testimonials page (ascending)."
+    }
+  }
+}

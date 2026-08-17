@@ -2,10 +2,11 @@
  * Demo seed content for the marketing site.
  *
  * - `seedAll` inserts the demo content (services, team members,
- *   accomplishments, metrics, values) — all published — on first boot, so a
- *   fresh checkout has live content for the React frontend. Idempotent: each
- *   collection is only seeded when empty. Disable entirely with
- *   `SEED_DEMO_CONTENT=false` in cms/.env.
+ *   accomplishments, metrics, values, testimonials, faqs) — all published —
+ *   on first boot, so a fresh checkout has live content for the React
+ *   frontend. Idempotent: each collection is only seeded when empty.
+ *   Testimonials are linked to the seeded services by slug. Disable entirely
+ *   with `SEED_DEMO_CONTENT=false` in cms/.env.
  * - `ensurePublicRead` grants the public role read-only access (find +
  *   findOne) to every public content API. Idempotent; runs on every boot.
  *
@@ -435,6 +436,213 @@ export const accomplishmentSeeds: AccomplishmentSeed[] = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * Testimonials — linked to the seeded services by slug
+ * ------------------------------------------------------------------ */
+
+interface TestimonialSeed {
+  clientName: string;
+  clientRole: string;
+  quote: string;
+  rating: number | null;
+  /** Slug of the seeded Service this quote relates to (null = general). */
+  serviceSlug: string | null;
+  order: number;
+}
+
+export const testimonialSeeds: TestimonialSeed[] = [
+  {
+    clientName: 'Dana Whitfield',
+    clientRole: 'VP of Product, Northwind Logistics',
+    quote:
+      'Himam rebuilt our customer portal in twelve weeks. It’s faster, cleaner, and our support tickets dropped by a third. They operate like an extension of our own team.',
+    rating: 5,
+    serviceSlug: 'custom-applications',
+    order: 1,
+  },
+  {
+    clientName: 'Marcus Lee',
+    clientRole: 'Founder, Lumen & Co',
+    quote:
+      'We came with an idea for an AI assistant; they came back with a shipped product and a plan to scale it. A rare mix of engineering depth and business sense.',
+    rating: 5,
+    serviceSlug: 'ai-chatbots',
+    order: 2,
+  },
+  {
+    clientName: 'Elena Kovac',
+    clientRole: 'COO, Kepler Health',
+    quote:
+      'The intake portal paid for itself in the first quarter. Patients stopped re-filling the same forms, and our front desk finally stopped re-keying data by hand.',
+    rating: 5,
+    serviceSlug: 'custom-applications',
+    order: 3,
+  },
+  {
+    clientName: 'Daniel Osei',
+    clientRole: 'Operations Director, Vantage Labs',
+    quote:
+      'Our order flow used to touch six systems and nine minutes of typing. Now it’s one pipeline and about ninety seconds. Month-end reconciliation takes an afternoon, not two days.',
+    rating: 4,
+    serviceSlug: 'business-systems',
+    order: 4,
+  },
+  {
+    clientName: 'Ingrid Halvorsen',
+    clientRole: 'Head of E-commerce, Fjord & Co',
+    quote:
+      'We redesigned once before with an agency and got a brochure. This time we got a CMS we actually edit ourselves and a real, measurable lift in enquiries.',
+    rating: 5,
+    serviceSlug: 'website-development',
+    order: 5,
+  },
+  {
+    clientName: 'Tomás Rivera',
+    clientRole: 'CTO, Bluepeak',
+    quote:
+      'Fast, accessible, and the team answered our questions in writing instead of on a call. The handover documentation alone was worth the price of admission.',
+    rating: 4,
+    serviceSlug: 'website-development',
+    order: 6,
+  },
+];
+
+/* ------------------------------------------------------------------ *
+ * FAQs — grouped by category on the FAQ page
+ * ------------------------------------------------------------------ */
+
+type FaqCategory = 'Pricing' | 'Process' | 'Technology' | 'Support';
+
+interface FaqSeed {
+  question: string;
+  answer: Blocks;
+  category: FaqCategory;
+  order: number;
+}
+
+export const faqSeeds: FaqSeed[] = [
+  {
+    question: 'How much does a project cost?',
+    answer: [
+      p(
+        'Every project is quoted individually after a short discovery call, because scope — not hours — drives price. As a guide: marketing sites start around $6,000, custom applications around $18,000, and business systems from $25,000. You’ll get a fixed, written quote before any work starts, and we stick to it.'
+      ),
+    ],
+    category: 'Pricing',
+    order: 1,
+  },
+  {
+    question: 'Do you work hourly or fixed-price?',
+    answer: [
+      p(
+        'Fixed-price for defined scope. Once we agree the specification, the price is the price — no surprise invoices at the end. Ongoing support and change requests are quoted separately and transparently.'
+      ),
+    ],
+    category: 'Pricing',
+    order: 2,
+  },
+  {
+    question: 'What does a quote include?',
+    answer: [
+      p(
+        'Discovery and specification, design, development, testing, deployment, and a written handover with documentation. Hosting and monitoring can be included for an ongoing fee.'
+      ),
+    ],
+    category: 'Pricing',
+    order: 3,
+  },
+  {
+    question: 'How long does a typical project take?',
+    answer: [
+      p(
+        'A marketing site typically ships in 4–8 weeks; a custom application in 8–16 weeks depending on scope. You’ll see a working build within the first two weeks of any project — never a long silence.'
+      ),
+    ],
+    category: 'Process',
+    order: 1,
+  },
+  {
+    question: 'How do you keep us updated?',
+    answer: [
+      p(
+        'A written weekly update plus a live demo environment you can click through anytime. Decisions that affect cost or timeline are raised in writing before they happen — you’ll never discover them in an invoice.'
+      ),
+    ],
+    category: 'Process',
+    order: 2,
+  },
+  {
+    question: 'What happens after launch?',
+    answer: [
+      p(
+        'Every engagement includes a handover with documentation and a training session for your team. Most clients then take an ongoing support plan for monitoring, maintenance, and small change requests.'
+      ),
+    ],
+    category: 'Process',
+    order: 3,
+  },
+  {
+    question: 'What tech stack do you use?',
+    answer: [
+      p(
+        'React and TypeScript on the frontend, Node or PostgreSQL on the backend, Strapi for content, and everything containerised and deployed with CI/CD. We choose boring, well-supported technology — the kind your next developer can pick up without a rewrite.'
+      ),
+    ],
+    category: 'Technology',
+    order: 1,
+  },
+  {
+    question: 'Do you work with our existing systems?',
+    answer: [
+      p(
+        'Usually, yes. We’ve integrated with ERPs, CRMs, helpdesks, payment providers, and legacy databases. The first deliverable of any systems project is a written integration plan for the tools you already use.'
+      ),
+    ],
+    category: 'Technology',
+    order: 2,
+  },
+  {
+    question: 'Can we edit content ourselves?',
+    answer: [
+      p(
+        'Yes — that’s the point. All site content lives in Strapi, a CMS your team can log into and edit without touching code. We train whoever needs it as part of the handover.'
+      ),
+    ],
+    category: 'Technology',
+    order: 3,
+  },
+  {
+    question: 'Who owns the code and the data?',
+    answer: [
+      p(
+        'You do. Source code, documentation, and all data are yours from day one. There are no lock-ins and no hostage clauses — if you ever want to take the project elsewhere, it’s yours to take.'
+      ),
+    ],
+    category: 'Technology',
+    order: 4,
+  },
+  {
+    question: 'Do you offer support after launch?',
+    answer: [
+      p(
+        'Yes. Most clients take a monthly support plan covering monitoring, security updates, backups, and small change requests. Larger changes are scoped and quoted as they come up.'
+      ),
+    ],
+    category: 'Support',
+    order: 1,
+  },
+  {
+    question: 'What happens if something breaks at 2am?',
+    answer: [
+      p(
+        'With a support plan, monitoring alerts us first — usually before your customers notice. We respond to incidents within the hours agreed in your plan, and critical issues are treated as emergencies.'
+      ),
+    ],
+    category: 'Support',
+    order: 2,
+  },
+];
+
+/* ------------------------------------------------------------------ *
  * Seeding
  * ------------------------------------------------------------------ */
 
@@ -466,6 +674,47 @@ async function seedCollection<T>(
   strapi.log.info(`[seed] created ${seeds.length} ${label}.`);
 }
 
+/**
+ * Insert the testimonials if the collection is empty, resolving each seed's
+ * `serviceSlug` against the seeded services so the relation is real.
+ */
+async function seedTestimonials(strapi: Core.Strapi): Promise<void> {
+  const uid = 'api::testimonial.testimonial';
+  const count = await strapi.query(uid).count();
+
+  if (count > 0) {
+    strapi.log.info('[seed] testimonials already present — skipping.');
+    return;
+  }
+
+  const slugs = [
+    ...new Set(
+      testimonialSeeds
+        .map((seed) => seed.serviceSlug)
+        .filter((slug): slug is string => Boolean(slug))
+    ),
+  ];
+  const services = await strapi
+    .query('api::service.service')
+    .findMany({ where: { slug: { $in: slugs } } });
+  const serviceIdBySlug = new Map(services.map((service) => [service.slug, service.id]));
+
+  for (const seed of testimonialSeeds) {
+    await strapi.entityService.create(uid, {
+      data: {
+        clientName: seed.clientName,
+        clientRole: seed.clientRole,
+        quote: seed.quote,
+        rating: seed.rating ?? undefined,
+        service: seed.serviceSlug ? (serviceIdBySlug.get(seed.serviceSlug) ?? null) : null,
+        order: seed.order,
+        publishedAt: new Date().toISOString(),
+      },
+    });
+  }
+  strapi.log.info(`[seed] created ${testimonialSeeds.length} testimonials.`);
+}
+
 /** Seed every demo collection on first boot (disable with SEED_DEMO_CONTENT=false). */
 export async function seedAll(strapi: Core.Strapi): Promise<void> {
   await seedCollection(strapi, 'api::service.service', 'services', serviceSeeds);
@@ -478,6 +727,8 @@ export async function seedAll(strapi: Core.Strapi): Promise<void> {
   );
   await seedCollection(strapi, 'api::metric.metric', 'metrics', metricSeeds);
   await seedCollection(strapi, 'api::value.value', 'values', valueSeeds);
+  await seedTestimonials(strapi);
+  await seedCollection(strapi, 'api::faq.faq', 'faqs', faqSeeds);
 }
 
 /* ------------------------------------------------------------------ *
@@ -490,7 +741,15 @@ export async function seedAll(strapi: Core.Strapi): Promise<void> {
  * the `api::<name>.<name>.find` / `.findOne` pattern. Writes stay behind
  * admin auth — the frontend never writes.
  */
-const PUBLIC_APIS = ['service', 'team-member', 'accomplishment', 'metric', 'value'] as const;
+const PUBLIC_APIS = [
+  'service',
+  'team-member',
+  'accomplishment',
+  'metric',
+  'value',
+  'testimonial',
+  'faq',
+] as const;
 
 /**
  * Ensure the public role can read the listed content APIs without auth.

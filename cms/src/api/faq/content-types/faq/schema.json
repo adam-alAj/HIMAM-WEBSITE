@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "faqs",
+  "info": {
+    "singularName": "faq",
+    "pluralName": "faqs",
+    "displayName": "FAQ",
+    "description": "A question/answer pair shown on the FAQ page, grouped by category. Edited in the Strapi admin by the team."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true,
+      "description": "The question, phrased the way a buyer would ask it."
+    },
+    "answer": {
+      "type": "blocks",
+      "required": true,
+      "description": "The answer — short paragraphs or a list; rendered as rich text."
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["Pricing", "Process", "Technology", "Support"],
+      "required": true,
+      "default": "Process",
+      "description": "Grouping shown on the FAQ page. Add new categories here if needed."
+    },
+    "order": {
+      "type": "integer",
+      "required": false,
+      "description": "Manual sort order within a category (ascending)."
+    }
+  }
+}

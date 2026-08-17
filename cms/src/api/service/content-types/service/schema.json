@@ -69,6 +69,13 @@
       "required": false,
       "description": "Optional price or engagement type, e.g. \"From $18,000\" or \"Fixed-scope engagement\"."
     },
+    "testimonials": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::testimonial.testimonial",
+      "mappedBy": "service",
+      "description": "Client quotes about this service (inverse of testimonial.service)."
+    },
     "order": {
       "type": "integer",
       "required": false,

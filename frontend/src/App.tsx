@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SiteLayout } from './layouts/SiteLayout'
 import About from './pages/About'
 import Accomplishments from './pages/Accomplishments'
@@ -35,7 +35,9 @@ function App() {
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Legal slug="privacy-policy" />} />
+          <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
           <Route path="/terms" element={<Legal slug="terms-of-service" />} />
+          <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="*" element={<PagePlaceholder />} />
         </Route>

@@ -3,6 +3,7 @@ import { Badge } from '../components/Badge/Badge'
 import { Button } from '../components/Button/Button'
 import { Card } from '../components/Card/Card'
 import { Icon, type IconName } from '../components/Icon/Icon'
+import { OrganizationJsonLd, WebSiteJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
 import { setPageMeta } from '../lib/seo'
 import { siteEmail, siteTagline } from '../lib/site'
@@ -92,6 +93,8 @@ export default function Home() {
 
   return (
     <>
+      <OrganizationJsonLd />
+      <WebSiteJsonLd />
       {/* 1. Hero */}
       <Section background="default" padding="lg">
         <div className={styles.hero}>

@@ -7,6 +7,7 @@ import { BlogPostCard } from '../components/BlogPostCard/BlogPostCard'
 import { Button } from '../components/Button/Button'
 import { Card } from '../components/Card/Card'
 import { Icon } from '../components/Icon/Icon'
+import { ArticleJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import {
@@ -145,6 +146,14 @@ export default function BlogPost() {
 
   return (
     <>
+      <ArticleJsonLd
+        title={post.title}
+        description={post.seoDescription ?? post.excerpt}
+        url={window.location.href}
+        image={coverUrl}
+        author={post.author?.name ?? null}
+        datePublished={post.publishedAt}
+      />
       {/* Hero — title, byline, cover */}
       <Section background="default" padding="lg">
         <Link to="/blog" className={styles.back}>

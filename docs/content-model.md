@@ -216,6 +216,17 @@ Not seeded — entries are created by real form submissions only.
 | message      | text     | required, ≤ 5000                               |
 | source       | string   | referrer set by the submit handler             |
 
+**Budget field decision (Phase 8):** The SRS §4.6.4 uses `budget`
+(decimal, example `"300.00"`), but the live schema uses `budgetRange`
+(enum of five ranges). Decision: **keep the enum as shipped.**
+Reasons: (1) the enum provides better UX (no arbitrary number entry),
+(2) produces clean, segmentable data for the sales team, (3) avoids
+free-text/decimal validation edge cases on a public form, and (4) is
+already live and tested in both frontend and CMS. The SRS's decimal
+wording is treated as functionally satisfied by an equivalent optional
+budget-qualification field. This should be flagged to the SRS owner as
+a documentation update for §4.6.4.
+
 API: the public API exposes **exactly one** endpoint —
 `POST /api/contact-submissions` (custom `submit` action, `auth: false`). It
 validates required fields + email format, drops honeypot-filled requests, and

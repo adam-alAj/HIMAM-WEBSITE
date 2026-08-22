@@ -18,6 +18,9 @@ playwright-report
 test-results
 blob-report
 
+# Build artifacts
+public/sitemap.xml
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

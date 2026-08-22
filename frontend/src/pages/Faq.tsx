@@ -3,6 +3,7 @@ import { Accordion } from '../components/Accordion/Accordion'
 import { Blocks } from '../components/Blocks/Blocks'
 import { Button } from '../components/Button/Button'
 import { Icon } from '../components/Icon/Icon'
+import { FAQJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { fetchFaqs, type Faq, type FaqCategory } from '../lib/cms'
@@ -84,8 +85,28 @@ export default function Faq() {
     return map
   }, [state])
 
+  /** Strip Strapi blocks to plain text for JSON-LD answer field. */
+  const faqJsonLdItems = useMemo(() => {
+    if (state.status !== 'ready') return []
+    return state.faqs.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer
+        .map((block) => {
+          if (block.type === 'paragraph' || block.type === 'heading') {
+            return (block as { children?: Array<{ text?: string }> }).children
+              ?.map((child) => child.text ?? '')
+              .join('') ?? ''
+          }
+          return ''
+        })
+        .join(' ')
+        .trim(),
+    }))
+  }, [state])
+
   return (
     <>
+      <FAQJsonLd items={faqJsonLdItems} />
       {/* Hero */}
       <Section background="default" padding="lg">
         <div className={styles.hero}>

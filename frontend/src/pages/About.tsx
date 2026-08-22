@@ -8,8 +8,10 @@ import { iconPaths } from '../components/Icon/icons'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import {
+  fetchServices,
   fetchTeamMembers,
   fetchValues,
+  type Service,
   type StudioValue,
   type TeamMember,
 } from '../lib/cms'
@@ -20,7 +22,7 @@ import styles from './About.module.css'
 type FetchState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; team: TeamMember[]; values: StudioValue[] }
+  | { status: 'ready'; team: TeamMember[]; values: StudioValue[]; services: Service[] }
 
 function isIconName(name: string): name is IconName {
   return name in iconPaths
@@ -105,8 +107,12 @@ export default function About() {
   const load = useCallback(async () => {
     setState({ status: 'loading' })
     try {
-      const [team, values] = await Promise.all([fetchTeamMembers(), fetchValues()])
-      setState({ status: 'ready', team, values })
+    const [team, values, services] = await Promise.all([
+      fetchTeamMembers(),
+      fetchValues(),
+      fetchServices(),
+    ])
+    setState({ status: 'ready', team, values, services })
     } catch (error) {
       setState({
         status: 'error',
@@ -221,6 +227,29 @@ export default function About() {
         )}
       </Section>
 
+      {/* What we do */}
+      <Section background="subtle" padding="lg">
+        <header className={styles.sectionHead}>
+          <p className={styles.eyebrow}>What we do</p>
+          <h2 className={styles.sectionTitle}>Four disciplines, one team.</h2>
+          <p className={styles.sectionIntro}>
+            Every service below is delivered end to end by the same three engineers —
+            from discovery to deploy. No hand-offs, no subcontracting.
+          </p>
+        </header>
+
+        {state.status === 'ready' && state.services.length > 0 && (
+          <div className={styles.serviceList}>
+            {state.services.map((service) => (
+              <div key={service.documentId} className={styles.serviceItem}>
+                <h3 className={styles.serviceName}>{service.title}</h3>
+                <p className={styles.serviceDesc}>{service.shortDescription}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </Section>
+
       {/* How we work */}
       <Section background="subtle" padding="lg">
         <header className={styles.sectionHead}>
@@ -271,7 +300,10 @@ export default function About() {
               Start a project
               <Icon name="arrow-right" size={16} aria-hidden="true" />
             </Button>
-            <Button size="lg" variant="secondary" href={`mailto:${siteEmail}`}>
+            <Button size="lg" variant="secondary" to="/testimonials">
+              Read what clients say
+            </Button>
+            <Button size="lg" variant="ghost" href={`mailto:${siteEmail}`}>
               Email us
             </Button>
           </div>

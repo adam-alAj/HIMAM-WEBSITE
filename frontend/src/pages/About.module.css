@@ -71,6 +71,35 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * What we do — service list
+ * ------------------------------------------------------------------ */
+.serviceList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.serviceItem {
+  padding: var(--space-6);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.serviceName {
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.serviceDesc {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
+  font-size: var(--text-body-sm);
+}
+
+/* ------------------------------------------------------------------ *
  * Founder cards
  * ------------------------------------------------------------------ */
 .memberGrid {

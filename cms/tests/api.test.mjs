@@ -182,7 +182,7 @@ test('permissions: contact submissions are never publicly readable', async () =>
   assert.equal(findOne.status, 401)
 })
 
-// Runs last: the in-memory per-IP limiter (5 per 10 min) counts every
+// Runs last: the in-memory per-IP limiter (5 per hour) counts every
 // non-honeypot request, so this test deliberately burns through the budget.
 test('contact form: rate limiter rejects bursts with 429', async () => {
   const results = []

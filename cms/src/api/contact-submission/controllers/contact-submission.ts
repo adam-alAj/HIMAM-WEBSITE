@@ -22,8 +22,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BUDGET_RANGES = ['Under $10k', '$10k – $25k', '$25k – $50k', '$50k+', 'Not sure yet'] as const;
 type BudgetRange = (typeof BUDGET_RANGES)[number];
 
-/** In-memory rate limit: max 5 submissions per IP per 10 minutes. */
-const RATE_LIMIT = { max: 5, windowMs: 10 * 60 * 1000 };
+/** In-memory rate limit: max 5 submissions per IP per hour (SRS §6.3 / SEC-CNT-002). */
+const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const ipHits = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {

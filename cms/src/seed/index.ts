@@ -698,7 +698,7 @@ export const blogPostSeeds: BlogPostSeed[] = [
     category: 'AI & Automation',
     seoTitle: 'How we approach AI chatbot projects — Himam',
     seoDescription:
-      'The process we use to build AI assistants that actually do work — grounded in your data, guarded where it matters, and handed off to a human at the right moment.',
+      'How we build AI assistants that actually work — grounded in your data, with guardrails and human handoff.',
     publishedAt: weeksAgo(3),
   },
   {

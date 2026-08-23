@@ -47,6 +47,8 @@ const server = spawn(npmBin, ['run', 'develop'], {
   cwd: cmsDir,
   env,
   stdio: ['ignore', 'pipe', 'pipe'],
+  // On Windows, spawning .cmd files requires a shell.
+  shell: process.platform === 'win32',
 })
 
 server.stdout.on('data', (chunk) => process.stdout.write(`[cms] ${chunk}`))

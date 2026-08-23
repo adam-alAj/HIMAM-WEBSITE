@@ -7,7 +7,8 @@
  * Coverage:
  *   - Every content type's public list/findOne returns 200 with the expected
  *     shape (documentId + required fields, seeded data present).
- *   - Write routes (POST/PUT/DELETE) reject unauthenticated requests (401).
+ *   - Write routes (POST/PUT/DELETE) reject unauthenticated requests (403 Forbidden
+ *     in Strapi v5 — anonymous role is denied at the permission layer).
  *   - The one public write (contact form) validates, honeypots, and rate-limits.
  */
 import test from 'node:test'
@@ -102,16 +103,18 @@ for (const [name, { plural, fields }] of Object.entries(CONTENT_TYPES)) {
   test(`permissions: unauthenticated writes to ${name} are rejected`, async () => {
     const sample = { title: 'Hacker test' }
     const post = await api(`/${plural}`, { method: 'POST', body: JSON.stringify(sample) })
-    assert.equal(post.status, 401, `POST /${plural} must require auth`)
+    // Strapi v5 returns 403 (Forbidden) — the anonymous role is denied at the
+    // permission layer, not at the authentication layer (401).
+    assert.ok(post.status === 401 || post.status === 403, `POST /${plural} must reject unauthenticated writes (got ${post.status})`)
 
     const put = await api(`/${plural}/000000000000000000000000`, {
       method: 'PUT',
       body: JSON.stringify(sample),
     })
-    assert.equal(put.status, 401, `PUT /${plural}/:id must require auth`)
+    assert.ok(put.status === 401 || put.status === 403, `PUT /${plural}/:id must reject unauthenticated writes (got ${put.status})`)
 
     const del = await api(`/${plural}/000000000000000000000000`, { method: 'DELETE' })
-    assert.equal(del.status, 401, `DELETE /${plural}/:id must require auth`)
+    assert.ok(del.status === 401 || del.status === 403, `DELETE /${plural}/:id must reject unauthenticated writes (got ${del.status})`)
   })
 }
 
@@ -175,11 +178,21 @@ test('contact form: honeypot submissions are silently dropped (fake success)', a
 })
 
 test('permissions: contact submissions are never publicly readable', async () => {
+  // Contact submissions intentionally expose NO public GET routes — the
+  // custom routes file only defines POST. An unauthenticated GET therefore
+  // returns 404 (route not found), which is a secure result: the endpoint
+  // does not exist publicly.
   const list = await api('/contact-submissions')
-  assert.equal(list.status, 401, 'lead data must not be exposed over the public API')
+  assert.ok(
+    list.status === 401 || list.status === 403 || list.status === 404,
+    `GET /contact-submissions must not expose lead data (got ${list.status})`,
+  )
 
   const findOne = await api('/contact-submissions/000000000000000000000000')
-  assert.equal(findOne.status, 401)
+  assert.ok(
+    findOne.status === 401 || findOne.status === 403 || findOne.status === 404,
+    `GET /contact-submissions/:id must not expose lead data (got ${findOne.status})`,
+  )
 })
 
 // Runs last: the in-memory per-IP limiter (5 per hour) counts every

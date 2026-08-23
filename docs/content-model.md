@@ -212,20 +212,17 @@ Not seeded — entries are created by real form submissions only.
 | email        | email    | required, ≤ 254 — format validated             |
 | company      | string   | optional, ≤ 200                                |
 | service      | relation | manyToOne → `api::service.service` (optional)  |
-| budgetRange  | enum     | optional — Under $10k / $10k–$25k / $25k–$50k / $50k+ / Not sure yet |
+| budgetMax    | integer  | optional — maximum budget as a whole-number monetary amount (e.g. 5000, 10000) |
 | message      | text     | required, ≤ 5000                               |
 | source       | string   | referrer set by the submit handler             |
 
-**Budget field decision (Phase 8):** The SRS §4.6.4 uses `budget`
-(decimal, example `"300.00"`), but the live schema uses `budgetRange`
-(enum of five ranges). Decision: **keep the enum as shipped.**
-Reasons: (1) the enum provides better UX (no arbitrary number entry),
-(2) produces clean, segmentable data for the sales team, (3) avoids
-free-text/decimal validation edge cases on a public form, and (4) is
-already live and tested in both frontend and CMS. The SRS's decimal
-wording is treated as functionally satisfied by an equivalent optional
-budget-qualification field. This should be flagged to the SRS owner as
-a documentation update for §4.6.4.
+**Budget field change:** The field was originally `budgetRange` (an enum of
+five predefined ranges), but this caused Strapi content type validation issues
+because enumeration values began with special characters. The field was replaced
+with `budgetMax`, an optional integer representing the customer's maximum budget
+as a whole-number monetary amount. This aligns with the SRS §4.6.4 intent while
+avoiding enum validation edge cases. The frontend uses a numeric input
+(`type="number"`, `min="0"`, `step="1"`).
 
 API: the public API exposes **exactly one** endpoint —
 `POST /api/contact-submissions` (custom `submit` action, `auth: false`). It

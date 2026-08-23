@@ -8,7 +8,6 @@ const mocks = vi.hoisted(() => ({
 }))
 
 vi.mock('../lib/cms', () => ({
-  BUDGET_RANGES: ['Under $10k', '$10k – $25k', '$25k – $50k', '$50k+', 'Not sure yet'],
   fetchServices: mocks.fetchServices,
   submitContactSubmission: mocks.submitContactSubmission,
 }))
@@ -92,6 +91,7 @@ describe('Contact page', () => {
       email: 'jane@example.com',
       honeypot: '',
     })
+    expect(payload.budgetMax).toBeNull()
   })
 
   it('surfaces a submission failure in an error alert and keeps the form', async () => {

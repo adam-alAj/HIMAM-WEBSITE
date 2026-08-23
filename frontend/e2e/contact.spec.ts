@@ -43,7 +43,7 @@ test.describe('Contact form', () => {
         'We are validating the contact pipeline from the CI pipeline.',
     )
     await page.getByLabel('Service of interest').selectOption({ index: 1 })
-    await page.getByLabel('Project budget range').selectOption({ label: '$10k – $25k' })
+    await page.getByLabel('Maximum budget').fill('15000')
 
     await page.getByRole('button', { name: 'Send message' }).click()
 

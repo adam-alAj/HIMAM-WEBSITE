@@ -52,7 +52,7 @@ jobs:
         run: npm --prefix cms ci
 
       - name: Typecheck
-        run: npm --prefix cms exec tsc -- --noEmit -p tsconfig.json
+        run: npm --prefix cms exec tsc -- --noEmit -p cms/tsconfig.json
 
       - name: Build Strapi
         run: npm --prefix cms run build

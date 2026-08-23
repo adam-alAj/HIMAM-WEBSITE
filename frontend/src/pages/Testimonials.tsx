@@ -240,7 +240,10 @@ export default function Testimonials() {
               Start a project
               <Icon name="arrow-right" size={16} aria-hidden="true" />
             </Button>
-            <Button size="lg" variant="secondary" href={`mailto:${siteEmail}`}>
+            <Button size="lg" variant="secondary" to="/accomplishments">
+              View our projects
+            </Button>
+            <Button size="lg" variant="ghost" href={`mailto:${siteEmail}`}>
               Email us
             </Button>
           </div>

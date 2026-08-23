@@ -18,12 +18,9 @@ import { factories, type Core } from '@strapi/strapi';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Must match the frontend BUDGET_RANGES (frontend/src/lib/cms.ts). */
-const BUDGET_RANGES = ['Under $10k', '$10k – $25k', '$25k – $50k', '$50k+', 'Not sure yet'] as const;
-type BudgetRange = (typeof BUDGET_RANGES)[number];
 
-/** In-memory rate limit: max 5 submissions per IP per 10 minutes. */
-const RATE_LIMIT = { max: 5, windowMs: 10 * 60 * 1000 };
+/** In-memory rate limit: max 5 submissions per IP per hour (SRS §6.3 / SEC-CNT-002). */
+const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const ipHits = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
@@ -130,10 +127,14 @@ export default factories.createCoreController(
 
       const company = cleanString(body.company, 200);
 
-      const budgetRange =
-        typeof body.budgetRange === 'string' && body.budgetRange !== '' ? body.budgetRange : null;
-      if (budgetRange && !(BUDGET_RANGES as readonly string[]).includes(budgetRange)) {
-        errors.budgetRange = 'Please choose a valid budget range.';
+      let budgetMax: number | null = null;
+      if (body.budgetMax != null && body.budgetMax !== '') {
+        const raw = Number(body.budgetMax);
+        if (!Number.isFinite(raw) || !Number.isInteger(raw) || raw < 0) {
+          errors.budgetMax = 'Please provide a valid maximum budget (a non-negative whole number).';
+        } else {
+          budgetMax = raw;
+        }
       }
 
       let service: number | null = null;
@@ -172,7 +173,7 @@ export default factories.createCoreController(
               email: (email as string).toLowerCase(),
               company: company ?? undefined,
               service,
-              budgetRange: (budgetRange ?? undefined) as BudgetRange | undefined,
+              budgetMax: budgetMax ?? undefined,
               message: message as string,
               source: ctx.request.headers.referer ?? undefined,
             },

@@ -1,9 +1,19 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Badge } from '../components/Badge/Badge'
 import { Button } from '../components/Button/Button'
 import { Card } from '../components/Card/Card'
 import { Icon, type IconName } from '../components/Icon/Icon'
+import { OrganizationJsonLd, WebSiteJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
+import { Skeleton } from '../components/Skeleton/Skeleton'
+import {
+  fetchMetrics,
+  fetchServices,
+  fetchTestimonials,
+  type Metric,
+  type Service,
+  type Testimonial,
+} from '../lib/cms'
 import { setPageMeta } from '../lib/seo'
 import { siteEmail, siteTagline } from '../lib/site'
 import styles from './Home.module.css'
@@ -35,54 +45,36 @@ const offerings: { icon: IconName; title: string; body: string }[] = [
   },
 ]
 
-const services: { title: string; body: string }[] = [
-  {
-    title: 'Custom software development',
-    body: 'We design, build, and ship products end to end — owning the roadmap, the code, and the release.',
-  },
-  {
-    title: 'AI & automation',
-    body: 'Chatbots, copilots, and workflow automation that cut repetitive work and answer your customers around the clock.',
-  },
-  {
-    title: 'Web & mobile platforms',
-    body: 'Marketing sites, web apps, and mobile apps built on modern, maintainable stacks you won’t have to throw away.',
-  },
-  {
-    title: 'Support & scale',
-    body: 'We stay after launch — monitoring, maintenance, and performance tuning as your business grows.',
-  },
-]
-
-const stats: [string, string][] = [
-  ['40+', 'Products shipped'],
-  ['12', 'Industries served'],
-  ['98%', 'Client retention'],
-  ['3', 'Senior engineers on every project'],
-]
-
-const clients = ['Northwind', 'Vantage Labs', 'Bluepeak', 'Kepler', 'Lumen & Co', 'Acme Corp']
-
-const testimonials: { quote: string; author: string; role: string }[] = [
-  {
-    quote:
-      'Himam rebuilt our customer portal in twelve weeks. It’s faster, cleaner, and our support tickets dropped by a third. They operate like an extension of our own team.',
-    author: 'Dana Whitfield',
-    role: 'VP of Product, Northwind',
-  },
-  {
-    quote:
-      'We came with an idea for an AI assistant; they came back with a shipped product and a plan to scale it. A rare mix of engineering depth and business sense.',
-    author: 'Marcus Lee',
-    role: 'Founder, Lumen & Co',
-  },
-]
+type FetchState =
+  | { status: 'loading' }
+  | { status: 'error' }
+  | { status: 'ready'; metrics: Metric[]; services: Service[]; testimonials: Testimonial[] }
 
 /* ------------------------------------------------------------------ *
  * Page
  * ------------------------------------------------------------------ */
 
 export default function Home() {
+  const [state, setState] = useState<FetchState>({ status: 'loading' })
+
+  const load = useCallback(async () => {
+    setState({ status: 'loading' })
+    try {
+      const [metrics, services, testimonials] = await Promise.all([
+        fetchMetrics(),
+        fetchServices(),
+        fetchTestimonials(),
+      ])
+      setState({ status: 'ready', metrics, services, testimonials })
+    } catch {
+      setState({ status: 'error' })
+    }
+  }, [])
+
+  useEffect(() => {
+    void load()
+  }, [load])
+
   useEffect(() => {
     setPageMeta({
       title: 'Himam — Software Engineering Studio',
@@ -92,6 +84,8 @@ export default function Home() {
 
   return (
     <>
+      <OrganizationJsonLd />
+      <WebSiteJsonLd />
       {/* 1. Hero */}
       <Section background="default" padding="lg">
         <div className={styles.hero}>
@@ -100,7 +94,7 @@ export default function Home() {
           </Badge>
           <h1 className={styles.heroTitle}>Software that moves your business forward.</h1>
           <p className={styles.heroLead}>
-            We’re a senior team of three engineers building web apps, mobile apps,
+            We're a senior team of three engineers building web apps, mobile apps,
             custom systems, and AI chatbots — from first sketch to production, owned
             end to end.
           </p>
@@ -147,7 +141,7 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 3. Services teaser */}
+      {/* 3. Services teaser — CMS-driven */}
       <Section background="default" padding="lg">
         <header className={styles.sectionHead}>
           <p className={styles.sectionEyebrow}>Services</p>
@@ -157,25 +151,39 @@ export default function Home() {
             conversation to years of steady operation.
           </p>
         </header>
-        <div className={styles.serviceList}>
-          {services.map((service) => (
-            <div className={styles.serviceRow} key={service.title}>
-              <div className={styles.serviceText}>
-                <h3 className={styles.serviceTitle}>{service.title}</h3>
-                <p className={styles.serviceBody}>{service.body}</p>
+        {state.status === 'loading' && (
+          <div className={styles.serviceList}>
+            {[1, 2, 3, 4].map((n) => (
+              <div className={styles.serviceRow} key={n}>
+                <div className={styles.serviceText}>
+                  <Skeleton width="60%" height={20} />
+                  <Skeleton width="100%" height={14} />
+                </div>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                to="/services"
-                className={styles.serviceLink}
-              >
-                View
-                <Icon name="arrow-up-right" size={16} aria-hidden="true" />
-              </Button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+        {state.status === 'ready' && (
+          <div className={styles.serviceList}>
+            {state.services.map((service) => (
+              <div className={styles.serviceRow} key={service.documentId}>
+                <div className={styles.serviceText}>
+                  <h3 className={styles.serviceTitle}>{service.title}</h3>
+                  <p className={styles.serviceBody}>{service.shortDescription}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  to={`/services/${service.slug}`}
+                  className={styles.serviceLink}
+                >
+                  View
+                  <Icon name="arrow-up-right" size={16} aria-hidden="true" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
         <div className={styles.ctaRow}>
           <Button variant="secondary" to="/services">
             View all services
@@ -183,55 +191,62 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 4. Proof */}
+      {/* 4. Proof — metrics from CMS */}
       <Section background="navy" padding="lg">
         <header className={`${styles.sectionHead} ${styles.sectionHeadNavy}`}>
           <p className={styles.sectionEyebrow}>Proof</p>
           <h2 className={styles.sectionTitle}>Results, not promises.</h2>
           <p className={styles.sectionIntro}>
-            A small studio lives on its track record. Here’s the short version.
+            A small studio lives on its track record. Here's the short version.
           </p>
         </header>
         <div className={styles.statsGrid}>
-          {stats.map(([number, label]) => (
-            <div className={styles.stat} key={label}>
-              <span className={styles.statNumber}>{number}</span>
-              <span className={styles.statLabel}>{label}</span>
-            </div>
-          ))}
-        </div>
-        <div className={styles.clients}>
-          <p className={styles.clientsLabel}>Trusted by teams at</p>
-          <ul className={styles.clientList}>
-            {clients.map((client) => (
-              <li key={client} className={styles.clientMark}>
-                {client}
-              </li>
+          {state.status === 'loading' &&
+            [1, 2, 3, 4].map((n) => (
+              <div className={styles.stat} key={n}>
+                <Skeleton width={64} height={36} />
+                <Skeleton width={100} height={14} />
+              </div>
             ))}
-          </ul>
+          {state.status === 'ready' &&
+            state.metrics.map((metric) => (
+              <div className={styles.stat} key={metric.documentId}>
+                <span className={styles.statNumber}>{metric.value}</span>
+                <span className={styles.statLabel}>{metric.label}</span>
+              </div>
+            ))}
         </div>
       </Section>
 
-      {/* 5. Testimonial teaser */}
+      {/* 5. Testimonial teaser — CMS-driven */}
       <Section background="default" padding="lg">
         <header className={styles.sectionHead}>
           <p className={styles.sectionEyebrow}>Testimonials</p>
           <h2 className={styles.sectionTitle}>What our clients say.</h2>
           <p className={styles.sectionIntro}>
-            We’re proud of the relationships behind these words — and we’d be glad to
+            We're proud of the relationships behind these words — and we'd be glad to
             introduce you.
           </p>
         </header>
         <div className={styles.testimonialGrid}>
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.author} variant="subtle" padding="lg">
-              <p className={styles.quote}>{testimonial.quote}</p>
-              <footer className={styles.quoteAuthor}>
-                <span className={styles.authorName}>{testimonial.author}</span>
-                <span className={styles.authorRole}>{testimonial.role}</span>
-              </footer>
-            </Card>
-          ))}
+          {state.status === 'loading' &&
+            [1, 2].map((n) => (
+              <Card key={n} variant="subtle" padding="lg">
+                <Skeleton width="100%" height={60} />
+                <Skeleton width="40%" height={14} />
+                <Skeleton width="30%" height={12} />
+              </Card>
+            ))}
+          {state.status === 'ready' &&
+            state.testimonials.slice(0, 2).map((testimonial) => (
+              <Card key={testimonial.documentId} variant="subtle" padding="lg">
+                <p className={styles.quote}>"{testimonial.quote}"</p>
+                <footer className={styles.quoteAuthor}>
+                  <span className={styles.authorName}>{testimonial.clientName}</span>
+                  <span className={styles.authorRole}>{testimonial.clientRole}</span>
+                </footer>
+              </Card>
+            ))}
         </div>
         <div className={styles.ctaRow}>
           <Button variant="secondary" to="/testimonials">
@@ -244,9 +259,9 @@ export default function Home() {
       {/* 6. Final CTA banner */}
       <Section background="navy" padding="lg">
         <div className={styles.ctaBanner}>
-          <h2 className={styles.ctaTitle}>Let’s build something that lasts.</h2>
+          <h2 className={styles.ctaTitle}>Let's build something that lasts.</h2>
           <p className={styles.ctaLead}>
-            Tell us what you’re working on. We’ll reply within one business day with
+            Tell us what you're working on. We'll reply within one business day with
             honest feedback and a clear next step.
           </p>
           <div className={styles.ctaRow}>

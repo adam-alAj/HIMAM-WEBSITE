@@ -38,11 +38,11 @@
       "required": false,
       "description": "Service the lead is interested in (from the dropdown)."
     },
-    "budgetRange": {
-      "type": "enumeration",
-      "enum": ["Under $10k", "$10k – $25k", "$25k – $50k", "$50k+", "Not sure yet"],
+    "budgetMax": {
+      "type": "integer",
       "required": false,
-      "description": "Optional project budget range. Keep in sync with the frontend BUDGET_RANGES."
+      "min": 0,
+      "description": "Optional maximum budget as a whole-number monetary amount (e.g. 5000, 10000, 25000)."
     },
     "message": {
       "type": "text",

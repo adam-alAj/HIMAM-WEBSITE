@@ -532,15 +532,7 @@ export interface ApiContactSubmissionContactSubmission
     draftAndPublish: false;
   };
   attributes: {
-    budgetRange: Schema.Attribute.Enumeration<
-      [
-        'Under $10k',
-        '$10k – $25k',
-        '$25k – $50k',
-        '$50k+',
-        'Not sure yet',
-      ]
-    >;
+    budgetMax: Schema.Attribute.Integer;
     company: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

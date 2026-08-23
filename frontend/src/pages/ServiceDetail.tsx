@@ -5,6 +5,7 @@ import { Blocks } from '../components/Blocks/Blocks'
 import { Button } from '../components/Button/Button'
 import { Icon, type IconName } from '../components/Icon/Icon'
 import { iconPaths } from '../components/Icon/icons'
+import { ServiceJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { fetchServiceBySlug, type Service } from '../lib/cms'
@@ -126,6 +127,11 @@ export default function ServiceDetail() {
 
   return (
     <>
+      <ServiceJsonLd
+        name={service.title}
+        description={service.shortDescription}
+        url={window.location.href}
+      />
       {/* Hero */}
       <Section background="default" padding="lg">
         <Link to="/services" className={styles.back}>

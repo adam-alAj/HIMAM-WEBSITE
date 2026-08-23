@@ -161,22 +161,14 @@ async function get<T>(path: string): Promise<T> {
  * Contact form — the site's single public write
  * ------------------------------------------------------------------ */
 
-/** Budget options — must match the CMS enum (cms/src/api/contact-submission schema). */
-export const BUDGET_RANGES = [
-  'Under $10k',
-  '$10k – $25k',
-  '$25k – $50k',
-  '$50k+',
-  'Not sure yet',
-] as const
-
 export interface ContactSubmissionInput {
   name: string
   email: string
   company: string | null
   /** Service document id from the Services fetch. */
   service: number | null
-  budgetRange: string | null
+  /** Optional maximum budget as a whole-number monetary amount. */
+  budgetMax: number | null
   message: string
   /** Honeypot — must stay empty; bots that fill it get a fake success. */
   honeypot: string

@@ -11,7 +11,6 @@ import { Input } from '../components/Input/Input'
 import { Section } from '../components/Section/Section'
 import { Select } from '../components/Select/Select'
 import {
-  BUDGET_RANGES,
   fetchServices,
   submitContactSubmission,
   type Service,
@@ -26,13 +25,13 @@ interface FormValues {
   company: string
   /** Empty string or a Service id (select values are strings). */
   service: string
-  budgetRange: string
+  budgetMax: string
   message: string
   /** Honeypot — stays visually hidden; bots that fill it get a fake success. */
   honeypot: string
 }
 
-type FieldName = 'name' | 'email' | 'company' | 'service' | 'budgetRange' | 'message'
+type FieldName = 'name' | 'email' | 'company' | 'service' | 'budgetMax' | 'message'
 type FormErrors = Partial<Record<FieldName, string>>
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
@@ -69,7 +68,7 @@ const EMPTY_FORM: FormValues = {
   email: '',
   company: '',
   service: '',
-  budgetRange: '',
+  budgetMax: '',
   message: '',
   honeypot: '',
 }
@@ -145,7 +144,7 @@ export default function Contact() {
         email: values.email.trim(),
         company: values.company.trim() || null,
         service: values.service ? Number(values.service) : null,
-        budgetRange: values.budgetRange || null,
+        budgetMax: values.budgetMax ? Number(values.budgetMax) : null,
         message: values.message.trim(),
         honeypot: values.honeypot,
       })
@@ -259,13 +258,16 @@ export default function Contact() {
                         : undefined
                     }
                   />
-                  <Select
-                    label="Project budget range"
-                    name="budgetRange"
-                    placeholder="Select a range (optional)"
-                    options={BUDGET_RANGES.map((range) => ({ value: range, label: range }))}
-                    value={values.budgetRange}
-                    onChange={handleChange('budgetRange')}
+                  <Input
+                    label="Maximum budget"
+                    name="budgetMax"
+                    type="number"
+                    placeholder="e.g. 10000"
+                    min="0"
+                    step="1"
+                    hint="Enter the maximum budget for your project (optional)."
+                    value={values.budgetMax}
+                    onChange={handleChange('budgetMax')}
                   />
                 </div>
 

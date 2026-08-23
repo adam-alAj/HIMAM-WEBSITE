@@ -1,10 +1,27 @@
-import { useId, type ChangeEventHandler, type FocusEventHandler } from 'react'
+import { useId, type ChangeEventHandler, type FocusEventHandler, type InputHTMLAttributes } from 'react'
 import { Icon } from '../Icon/Icon'
 import styles from './Input.module.css'
 
 export type InputSize = 'md' | 'lg'
 
-interface InputProps {
+/** Native HTML input attributes that aren't overridden by our custom props. */
+type InputNativeProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  | 'type'
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
+  | 'onBlur'
+  | 'disabled'
+  | 'required'
+  | 'placeholder'
+  | 'name'
+  | 'id'
+  | 'autoComplete'
+  | 'size'
+>
+
+interface InputProps extends InputNativeProps {
   label: string
   id?: string
   name?: string
@@ -48,6 +65,8 @@ export function Input({
   onChange,
   onBlur,
   autoComplete,
+  className,
+  ...rest
 }: InputProps) {
   const generatedId = useId()
   const fieldId = id ?? generatedId
@@ -61,7 +80,7 @@ export function Input({
 
   const fieldClasses = multiline ? styles.textarea : styles.input
 
-  const commonProps = {
+  const sharedProps = {
     id: fieldId,
     name,
     placeholder,
@@ -88,9 +107,14 @@ export function Input({
         )}
       </label>
       {multiline ? (
-        <textarea className={fieldClasses} rows={rows} {...commonProps} />
+        <textarea className={fieldClasses} rows={rows} {...sharedProps} />
       ) : (
-        <input className={fieldClasses} type={type} {...commonProps} />
+        <input
+          type={type}
+          className={[fieldClasses, className].filter(Boolean).join(' ') || undefined}
+          {...sharedProps}
+          {...rest}
+        />
       )}
       {error ? (
         <p id={errorId} className={styles.errorText} role="alert">

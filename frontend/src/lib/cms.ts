@@ -32,29 +32,18 @@ export function resolveMediaUrl(url: string | null | undefined): string | null {
 }
 
 /**
- * Icon names allowed by the CMS `service.icon` enum. Each must exist in the
- * frontend Icon set (frontend/src/components/Icon/icons.tsx) — the enum and this
- * list are documented as a shared contract in cms/src/api/service schema.
+ * Icon name from the CMS. The CMS stores any string; the frontend validates
+ * it against the Icon component at render time (see isIconName() in each
+ * consumer) and falls back to 'layers' for unknown names.
+ *
+ * Recommended icons (must exist in frontend/src/components/Icon/icons.tsx):
+ *   monitor, phone, database, bot, code, layers, shield, globe,
+ *   users, message-square, search, calendar, clock, send, mail, map-pin
+ *
+ * To add a new icon: add the SVG path to icons.tsx, then use its name
+ * in Strapi. No schema change needed.
  */
-export const SERVICE_ICONS = [
-  'monitor',
-  'phone',
-  'database',
-  'bot',
-  'code',
-  'layers',
-  'shield',
-  'globe',
-  'users',
-  'message-square',
-  'search',
-  'calendar',
-  'clock',
-  'send',
-  'mail',
-  'map-pin',
-] as const
-export type ServiceIconName = (typeof SERVICE_ICONS)[number]
+export type ServiceIconName = string
 
 /* ------------------------------------------------------------------ *
  * Strapi "blocks" rich text (docs/content-model.md — rich text fields

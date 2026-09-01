@@ -48,27 +48,18 @@ const list = (items: string[]): Block => ({
  * Services (Phase 4)
  * ------------------------------------------------------------------ */
 
-/** Icon names shared with the frontend Icon component (MASTER.md §14). */
-const SERVICE_ICON_NAMES = [
-  'monitor',
-  'phone',
-  'database',
-  'bot',
-  'code',
-  'layers',
-  'shield',
-  'globe',
-  'users',
-  'message-square',
-  'search',
-  'calendar',
-  'clock',
-  'send',
-  'mail',
-  'map-pin',
-] as const;
-
-type ServiceIconName = (typeof SERVICE_ICON_NAMES)[number];
+/**
+ * Icon name from the CMS. The schema accepts any string; the frontend
+ * validates it against the Icon component at render time.
+ *
+ * Recommended icons (must exist in frontend/src/components/Icon/icons.tsx):
+ *   monitor, phone, database, bot, code, layers, shield, globe,
+ *   users, message-square, search, calendar, clock, send, mail, map-pin
+ *
+ * To add a new icon: add the SVG path to icons.tsx, then use its name
+ * here and in Strapi. Unknown names fall back to 'layers' at render time.
+ */
+type ServiceIconName = string;
 
 interface ServiceSeed {
   title: string;

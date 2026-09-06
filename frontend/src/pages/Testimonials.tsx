@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Button } from '../components/Button/Button'
-import { Card } from '../components/Card/Card'
 import { Icon } from '../components/Icon/Icon'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
 import { StarRating } from '../components/StarRating/StarRating'
-import { fetchTestimonials, type Testimonial } from '../lib/cms'
+import { fetchTestimonials, resolveMediaUrl, type Testimonial } from '../lib/cms'
 import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './Testimonials.module.css'
@@ -25,60 +23,177 @@ function initialsOf(name: string): string {
     .join('')
 }
 
-function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
-  const service = testimonial.service
+
+function Avatar({
+  photo,
+  name,
+  size = 'md',
+}: {
+  photo: Testimonial['photo']
+  name: string
+  size?: 'md' | 'lg'
+}) {
+  const resolvedUrl = resolveMediaUrl(photo?.url)
+  if (resolvedUrl) {
+    return (
+      <img
+        className={`${styles.avatar} ${size === 'lg' ? styles.avatarLg : ''}`}
+        src={resolvedUrl}
+        alt={photo?.alternativeText ?? name}
+        loading="lazy"
+      />
+    )
+  }
   return (
-    <Card padding="lg" className={styles.card}>
-      {testimonial.rating != null && <StarRating rating={testimonial.rating} />}
+    <span
+      className={`${styles.avatarPlaceholder} ${size === 'lg' ? styles.avatarPlaceholderLg : ''}`}
+      aria-hidden="true"
+    >
+      {initialsOf(name)}
+    </span>
+  )
+}
 
-      <blockquote className={styles.quote}>“{testimonial.quote}”</blockquote>
+function FeaturedCard({ testimonial }: { testimonial: Testimonial }) {
+  const service = testimonial.service
+  const imageUrl = resolveMediaUrl(testimonial.image?.url)
 
-      <footer className={styles.author}>
-        {testimonial.photo?.url ? (
-          <img
-            className={styles.avatar}
-            src={testimonial.photo.url}
-            alt={testimonial.photo.alternativeText ?? testimonial.clientName}
-          />
+  return (
+    <div className={styles.featured}>
+      <div className={styles.featuredInner}>
+        {imageUrl ? (
+          <div className={styles.featuredImageArea}>
+            <img
+              className={styles.featuredImage}
+              src={imageUrl}
+              alt={testimonial.image?.alternativeText ?? testimonial.clientName}
+              loading="lazy"
+            />
+            <div className={styles.featuredImageOverlay} />
+            <div className={styles.featuredImageContent}>
+              {testimonial.rating != null && (
+                <StarRating rating={testimonial.rating} className={styles.rating} />
+              )}
+              <blockquote className={styles.featuredQuoteImage}>
+                &ldquo;{testimonial.quote}&rdquo;
+              </blockquote>
+              <footer className={styles.featuredAuthorImage}>
+                <Avatar photo={testimonial.photo} name={testimonial.clientName} size="lg" />
+                <div className={styles.authorText}>
+                  <span className={styles.authorNameLight}>{testimonial.clientName}</span>
+                  <span className={styles.authorRoleLight}>{testimonial.clientRole}</span>
+                </div>
+              </footer>
+              {service && (
+                <div className={styles.featuredServiceLight}>
+                  <Icon name="arrow-up-right" size={14} aria-hidden="true" />
+                  <span>{service.title}</span>
+                </div>
+              )}
+            </div>
+          </div>
         ) : (
-          <span className={styles.avatarPlaceholder} aria-hidden="true">
-            {initialsOf(testimonial.clientName)}
-          </span>
+          <div className={styles.featuredContent}>
+            {testimonial.rating != null && (
+              <StarRating rating={testimonial.rating} className={styles.rating} />
+            )}
+            <blockquote className={styles.featuredQuote}>
+              &ldquo;{testimonial.quote}&rdquo;
+            </blockquote>
+            <footer className={styles.featuredAuthor}>
+              <Avatar photo={testimonial.photo} name={testimonial.clientName} size="lg" />
+              <div className={styles.authorText}>
+                <span className={styles.authorName}>{testimonial.clientName}</span>
+                <span className={styles.authorRole}>{testimonial.clientRole}</span>
+              </div>
+            </footer>
+            {service && (
+              <div className={styles.featuredService}>
+                <Icon name="arrow-up-right" size={14} aria-hidden="true" />
+                <span>{service.title}</span>
+              </div>
+            )}
+          </div>
         )}
-        <div className={styles.authorText}>
-          <span className={styles.authorName}>{testimonial.clientName}</span>
-          <span className={styles.authorRole}>{testimonial.clientRole}</span>
-        </div>
-      </footer>
+      </div>
+    </div>
+  )
+}
 
-      {service && (
-        <Link to={`/services/${service.slug}`} className={styles.serviceLink}>
-          <Icon name="arrow-up-right" size={14} aria-hidden="true" />
-          {service.title}
-        </Link>
+function StandardCard({ testimonial }: { testimonial: Testimonial }) {
+  const service = testimonial.service
+  const imageUrl = resolveMediaUrl(testimonial.image?.url)
+
+  return (
+    <div className={styles.card}>
+      {imageUrl && (
+        <div className={styles.cardImageWrap}>
+          <img
+            className={styles.cardImage}
+            src={imageUrl}
+            alt={testimonial.image?.alternativeText ?? testimonial.clientName}
+            loading="lazy"
+          />
+        </div>
       )}
-    </Card>
+      <div className={styles.cardBody}>
+        {testimonial.rating != null && (
+          <StarRating rating={testimonial.rating} className={styles.rating} />
+        )}
+        <blockquote className={styles.quote}>
+          &ldquo;{testimonial.quote}&rdquo;
+        </blockquote>
+        <footer className={styles.cardFooter}>
+          <div className={styles.author}>
+            <Avatar photo={testimonial.photo} name={testimonial.clientName} />
+            <div className={styles.authorText}>
+              <span className={styles.authorName}>{testimonial.clientName}</span>
+              <span className={styles.authorRole}>{testimonial.clientRole}</span>
+            </div>
+          </div>
+          {service && (
+            <span className={styles.serviceTag}>{service.title}</span>
+          )}
+        </footer>
+      </div>
+    </div>
   )
 }
 
 function TestimonialsSkeleton() {
   return (
-    <div className={styles.grid} aria-hidden="true">
-      {Array.from({ length: 6 }, (_, index) => (
-        <div key={index} className={styles.skeletonCard}>
-          <Skeleton width={88} height={16} radius="sm" />
-          <Skeleton width="100%" height={14} />
-          <Skeleton width="96%" height={14} />
-          <Skeleton width="70%" height={14} />
-          <div className={styles.skeletonAuthor}>
-            <Skeleton circle width={40} height={40} />
-            <div className={styles.skeletonAuthorText}>
-              <Skeleton width={120} height={14} radius="sm" />
-              <Skeleton width={160} height={12} radius="sm" />
-            </div>
+    <div aria-hidden="true">
+      <div className={styles.skeletonFeatured}>
+        <Skeleton width={88} height={16} radius="sm" />
+        <Skeleton width="100%" height={18} />
+        <Skeleton width="96%" height={18} />
+        <Skeleton width="85%" height={18} />
+        <Skeleton width="60%" height={18} />
+        <div className={styles.skeletonAuthor}>
+          <Skeleton circle width={48} height={48} />
+          <div className={styles.skeletonAuthorText}>
+            <Skeleton width={140} height={14} radius="sm" />
+            <Skeleton width={180} height={12} radius="sm" />
           </div>
         </div>
-      ))}
+      </div>
+      <div className={styles.grid} style={{ marginTop: 'var(--space-8)' }}>
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index} className={styles.skeletonCard}>
+            <Skeleton width={88} height={14} radius="sm" />
+            <Skeleton width="100%" height={14} />
+            <Skeleton width="92%" height={14} />
+            <Skeleton width="68%" height={14} />
+            <div className={styles.skeletonAuthor}>
+              <Skeleton circle width={40} height={40} />
+              <div className={styles.skeletonAuthorText}>
+                <Skeleton width={110} height={14} radius="sm" />
+                <Skeleton width={150} height={12} radius="sm" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -87,6 +202,9 @@ function TestimonialsSkeleton() {
  * Testimonials page — client quotes read live from Strapi, filterable by the
  * Service each quote relates to (docs/content-model.md §8). A visitor reading
  * the AI Chatbots service can see proof specific to that offering.
+ *
+ * Layout: featured first testimonial (full-width, prominent) + staggered
+ * two-column grid for the rest.
  */
 export default function Testimonials() {
   const [state, setState] = useState<FetchState>({ status: 'loading' })
@@ -137,6 +255,10 @@ export default function Testimonials() {
         : state.testimonials
       : []
 
+  /** Split into featured (first) and remaining cards. */
+  const featured = filtered.length > 0 ? filtered[0] : null
+  const remaining = filtered.length > 0 ? filtered.slice(1) : []
+
   return (
     <>
       {/* Hero */}
@@ -145,13 +267,16 @@ export default function Testimonials() {
           <p className={styles.eyebrow}>Testimonials</p>
           <h1 className={styles.title}>What our clients say.</h1>
           <p className={styles.lead}>
-            We’re a small studio, so we live on word of mouth. Here’s what the people
-            we’ve worked with say — filter by the service you’re interested in.
+            We're a small studio, so we live on word of mouth. Here's what the people
+            we've worked with say — filter by the service you're interested in.
           </p>
+          {state.status === 'ready' && (
+            <p className={styles.count}>{state.testimonials.length} client reviews</p>
+          )}
         </div>
       </Section>
 
-      {/* Filter + grid */}
+      {/* Filter + testimonials */}
       <Section background="subtle" padding="lg">
         {state.status === 'ready' && tabs.length > 0 && (
           <div className={styles.tabs} role="group" aria-label="Filter testimonials by service">
@@ -162,6 +287,7 @@ export default function Testimonials() {
               onClick={() => setActiveSlug(null)}
             >
               All
+              <span className={styles.tabCount}>{state.testimonials.length}</span>
             </button>
             {tabs.map((tab) => (
               <button
@@ -182,9 +308,9 @@ export default function Testimonials() {
         {state.status === 'error' && (
           <div className={styles.statePanel} role="alert">
             <Icon name="alert-triangle" size={24} className={styles.errorIcon} aria-hidden="true" />
-            <h2 className={styles.stateTitle}>Couldn’t load testimonials</h2>
+            <h2 className={styles.stateTitle}>Couldn't load testimonials</h2>
             <p className={styles.stateBody}>
-              The content service isn’t responding right now ({state.message}). Please try
+              The content service isn't responding right now ({state.message}). Please try
               again.
             </p>
             <Button onClick={() => void load()}>Try again</Button>
@@ -195,7 +321,7 @@ export default function Testimonials() {
           <div className={styles.statePanel}>
             <h2 className={styles.stateTitle}>No testimonials published yet</h2>
             <p className={styles.stateBody}>
-              Client quotes are being collected. Meanwhile, we’d love to hear about your
+              Client quotes are being collected. Meanwhile, we'd love to hear about your
               project.
             </p>
             <Button to="/contact">Start a project</Button>
@@ -206,8 +332,8 @@ export default function Testimonials() {
           <div className={styles.statePanel}>
             <h2 className={styles.stateTitle}>No testimonials for this service yet</h2>
             <p className={styles.stateBody}>
-              We haven’t published quotes for this offering yet — but the projects are
-              real. See what we’ve shipped, or ask us directly.
+              We haven't published quotes for this offering yet — but the projects are
+              real. See what we've shipped, or ask us directly.
             </p>
             <div className={styles.stateActions}>
               <Button variant="secondary" onClick={() => setActiveSlug(null)}>
@@ -218,12 +344,17 @@ export default function Testimonials() {
           </div>
         )}
 
-        {state.status === 'ready' && filtered.length > 0 && (
-          <div className={styles.grid}>
-            {filtered.map((testimonial) => (
-              <TestimonialCard key={testimonial.documentId} testimonial={testimonial} />
-            ))}
-          </div>
+        {state.status === 'ready' && featured && (
+          <>
+            <FeaturedCard testimonial={featured} />
+            {remaining.length > 0 && (
+              <div className={styles.grid}>
+                {remaining.map((testimonial) => (
+                  <StandardCard key={testimonial.documentId} testimonial={testimonial} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </Section>
 
@@ -232,8 +363,8 @@ export default function Testimonials() {
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>Want a reference you can call?</h2>
           <p className={styles.ctaLead}>
-            We’re happy to put you in touch with a past client who’s worked on something
-            similar to what you’re planning.
+            We're happy to put you in touch with a past client who's worked on something
+            similar to what you're planning.
           </p>
           <div className={styles.ctaActions}>
             <Button size="lg" to="/contact">

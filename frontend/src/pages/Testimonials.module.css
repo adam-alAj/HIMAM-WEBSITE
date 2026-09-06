@@ -31,6 +31,12 @@
   max-width: 52ch;
 }
 
+.count {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
 /* ------------------------------------------------------------------ *
  * Filter tabs
  * ------------------------------------------------------------------ */
@@ -38,10 +44,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-10);
 }
 
 .tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
   min-height: 40px;
   padding: var(--space-2) var(--space-4);
   border: var(--border-width) solid var(--color-border);
@@ -63,6 +72,11 @@
   color: var(--color-blue-700);
 }
 
+.tab:focus-visible {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
 .tabActive,
 .tabActive:hover {
   background: var(--color-blue-600);
@@ -70,42 +84,283 @@
   color: var(--color-text-on-primary);
 }
 
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-1-5);
+  border-radius: var(--radius-full);
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.tabActive .tabCount {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-on-primary);
+}
+
 /* ------------------------------------------------------------------ *
- * Testimonial cards
+ * Featured testimonial — full-width hero card
+ * ------------------------------------------------------------------ */
+.featured {
+  margin-bottom: var(--space-10);
+}
+
+.featuredInner {
+  position: relative;
+  background: var(--color-blue-900);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* When image exists */
+.featuredInner:has(.featuredImageArea) {
+  padding: 0;
+}
+
+/* Subtle decorative gradient in the top-right corner */
+.featuredInner::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.featuredContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-12) var(--space-10);
+}
+
+.featuredQuote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse);
+  max-width: 52ch;
+}
+
+.featuredAuthor {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.featuredAuthor .authorName {
+  color: var(--color-text-inverse);
+  font-size: var(--text-body);
+}
+
+.featuredAuthor .authorRole {
+  color: var(--color-text-inverse-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ------------------------------------------------------------------ *
+ * Featured with image — split layout
+ * ------------------------------------------------------------------ */
+.featuredImageArea {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 420px;
+}
+
+.featuredImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.featuredImageOverlay {
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  background: linear-gradient(90deg, transparent 0%, var(--color-blue-900) 40%);
+  pointer-events: none;
+}
+
+.featuredImageContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-10);
+  color: var(--color-text-inverse);
+}
+
+.featuredQuoteImage {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse);
+}
+
+.featuredAuthorImage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.authorNameLight {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-inverse);
+  font-size: var(--text-body);
+}
+
+.authorRoleLight {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-inverse-muted);
+}
+
+.featuredServiceLight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse-muted);
+  width: fit-content;
+}
+
+.featuredService {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * Standard cards — staggered two-column grid
  * ------------------------------------------------------------------ */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-6);
+  align-items: start;
+}
+
+/* Stagger: every even child gets a top offset */
+.grid > :nth-child(even) {
+  margin-top: var(--space-8);
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+  transition:
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
   height: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-blue-200);
+}
+
+/* Card image at top */
+.cardImageWrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-blue-50);
+  aspect-ratio: 16 / 9;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.03);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  flex: 1;
 }
 
 .quote {
   margin: 0;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg-line);
+  font-style: italic;
   flex: 1;
+}
+
+.rating {
+  /* Subtle positioning within the card */
+}
+
+/* ------------------------------------------------------------------ *
+ * Card footer — author + service
+ * ------------------------------------------------------------------ */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--color-border);
 }
 
 .author {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-top: var(--space-2);
 }
 
 .avatar,
 .avatarPlaceholder {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
   flex-shrink: 0;
 }
@@ -126,6 +381,17 @@
   font-weight: var(--weight-semibold);
 }
 
+.avatarLg {
+  width: 56px;
+  height: 56px;
+}
+
+.avatarPlaceholderLg {
+  width: 56px;
+  height: 56px;
+  font-size: var(--text-body);
+}
+
 .authorText {
   display: flex;
   flex-direction: column;
@@ -142,22 +408,30 @@
   color: var(--color-text-muted);
 }
 
-.serviceLink {
+.serviceTag {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1-5);
-  font-size: var(--text-body-sm);
-  font-weight: var(--weight-semibold);
-  color: var(--color-blue-600);
-}
-
-.serviceLink:hover {
+  padding: var(--space-1-5) var(--space-3);
+  background: var(--color-blue-50);
   color: var(--color-blue-700);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
 }
 
 /* ------------------------------------------------------------------ *
  * Skeleton + states
  * ------------------------------------------------------------------ */
+.skeletonFeatured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-10);
+  background: var(--color-blue-100);
+  border-radius: var(--radius-xl);
+}
+
 .skeletonCard {
   display: flex;
   flex-direction: column;
@@ -246,4 +520,60 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive (MASTER.md §9) — mobile-first adjustments
+ * ------------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  .grid {
+    gap: var(--space-5);
+  }
+
+  .grid > :nth-child(even) {
+    margin-top: 0;
+  }
+
+  .featuredImageArea {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .featuredImage {
+    aspect-ratio: 16 / 9;
+  }
+
+  .featuredImageOverlay {
+    inset: 0;
+    left: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--color-blue-900) 50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featuredContent {
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .featuredImageContent {
+    padding: var(--space-6);
+  }
+
+  .featuredQuote {
+    font-size: var(--text-h3);
+  }
+
+  .featuredQuoteImage {
+    font-size: var(--text-h4);
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
 }

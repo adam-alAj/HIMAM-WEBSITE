@@ -34,6 +34,13 @@
       "allowedTypes": ["images"],
       "description": "Optional avatar. The frontend shows an initials placeholder until one is uploaded."
     },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional larger testimonial image (project screenshot, team photo, etc.). Displayed prominently on the card."
+    },
     "rating": {
       "type": "integer",
       "required": false,

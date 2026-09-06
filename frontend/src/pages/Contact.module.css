@@ -1,17 +1,46 @@
-/* Contact page layout — tokens only (design-system/MASTER.md §17). */
+/* Contact page — premium redesign (tokens only, design-system/MASTER.md). */
 
-/* ------------------------------------------------------------------ *
- * Hero
- * ------------------------------------------------------------------ */
+/* ================================================================== *
+ * Hero                                                                *
+ * ================================================================== */
 .hero {
-  max-width: 44rem;
+  position: relative;
+  max-width: 56rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-4);
+  gap: var(--space-5);
+  overflow: hidden;
+}
+
+/* Decorative grid pattern */
+.heroGrid {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.4;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Soft blue glow */
+.heroGlow {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 480px;
+  height: 480px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, rgba(46, 111, 194, 0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .eyebrow {
+  position: relative;
   font-size: var(--text-label);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--text-label-tracking);
@@ -19,64 +48,369 @@
   color: var(--color-blue-600);
 }
 
-.title {
-  font-size: var(--text-h1);
-  line-height: var(--text-h1-line);
+.heroTitle {
+  position: relative;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.12;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.025em;
+  color: var(--color-text-primary);
+  max-width: 20ch;
 }
 
-.lead {
+.heroAccent {
+  color: var(--color-blue-600);
+}
+
+.heroLead {
+  position: relative;
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg-line);
   color: var(--color-text-secondary);
-  max-width: 52ch;
+  max-width: 48ch;
 }
 
-/* ------------------------------------------------------------------ *
- * Layout — form + aside
- * ------------------------------------------------------------------ */
-.layout {
+/* ================================================================== *
+ * Main contact grid                                                   *
+ * ================================================================== */
+.contactGrid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
-  gap: var(--space-8);
+  grid-template-columns: 1fr 1.1fr;
+  gap: var(--space-12);
   align-items: start;
 }
 
+/* ================================================================== *
+ * Left panel — contact information                                    *
+ * ================================================================== */
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  position: sticky;
+  top: var(--space-8);
+}
+
+.infoHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.infoTitle {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.infoBody {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-secondary);
+  max-width: 40ch;
+}
+
+/* ---- Info cards ---- */
+.infoCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.infoCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+a.infoCard:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-blue-200);
+  transform: translateY(-2px);
+}
+
+.infoCardIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-50);
+  color: var(--color-blue-600);
+  flex-shrink: 0;
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+a.infoCard:hover .infoCardIcon {
+  background: var(--color-blue-100);
+}
+
+.infoCardContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.infoCardLabel {
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--text-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.infoCardValue {
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.infoCardArrow {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+a.infoCard:hover .infoCardArrow {
+  color: var(--color-blue-600);
+}
+
+/* ---- Highlight strip ---- */
+.infoHighlight {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-blue-50);
+  border: var(--border-width) solid var(--color-blue-100);
+  border-radius: var(--radius-lg);
+  color: var(--color-blue-700);
+}
+
+.infoHighlight svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.infoHighlightText {
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-secondary);
+}
+
+/* ================================================================== *
+ * Right panel — form card                                            *
+ * ================================================================== */
 .formCard {
-  padding: var(--space-8);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 1px 3px rgba(8, 27, 58, 0.06),
+    0 8px 24px rgba(8, 27, 58, 0.08);
+  overflow: hidden;
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+.formCard:hover {
+  box-shadow:
+    0 1px 3px rgba(8, 27, 58, 0.06),
+    0 12px 32px rgba(8, 27, 58, 0.12);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+}
+
+/* ---- Form header ---- */
+.formHeader {
+  padding: var(--space-8) var(--space-8) var(--space-6);
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
 .formTitle {
   font-size: var(--text-h3);
   line-height: var(--text-h3-line);
+  font-weight: var(--weight-bold);
 }
 
 .formIntro {
   color: var(--color-text-secondary);
   line-height: var(--text-body-line);
-  margin-top: calc(-1 * var(--space-2));
+  margin-top: var(--space-1);
+  font-size: var(--text-body);
 }
 
-.fieldGrid {
+/* ---- Form body ---- */
+.formBody {
+  padding: var(--space-6) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.fieldRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-5);
 }
 
-.messageField {
-  display: flex;
-  flex-direction: column;
+/* ------------------------------------------------------------------ *
+ * Field overrides — premium input styling inside the form card
+ * ------------------------------------------------------------------ */
+
+/* Taller, rounder inputs */
+.formCard :global(.input),
+.formCard :global(.textarea) {
+  height: auto;
+  min-height: 56px;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-border);
+  font-size: var(--text-body-lg);
+  background: var(--color-blue-50);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
 }
 
+.formCard :global(.textarea) {
+  min-height: 160px;
+  padding: var(--space-5) var(--space-6);
+  resize: vertical;
+}
+
+/* Hover */
+.formCard :global(.input):hover:not(:disabled),
+.formCard :global(.textarea):hover:not(:disabled) {
+  border-color: var(--color-blue-300);
+  background: var(--color-white);
+}
+
+/* Focus — blue ring + white background */
+.formCard :global(.input):focus-visible,
+.formCard :global(.textarea):focus-visible {
+  border-color: var(--color-blue-600);
+  background: var(--color-white);
+  box-shadow: 0 0 0 4px rgba(31, 95, 191, 0.12);
+}
+
+/* Error state */
+.formCard :global(.hasError) :global(.input),
+.formCard :global(.hasError) :global(.textarea) {
+  border-color: var(--color-error);
+  background: var(--color-white);
+}
+
+.formCard :global(.hasError) :global(.input):focus-visible,
+.formCard :global(.hasError) :global(.textarea):focus-visible {
+  box-shadow: var(--shadow-focus-error);
+}
+
+/* Labels — cleaner, modern */
+.formCard :global(.label) {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  text-transform: none;
+  letter-spacing: normal;
+  margin-bottom: var(--space-1);
+}
+
+/* Select — taller, rounder */
+.formCard :global(.select) {
+  height: 56px;
+  padding: 0 var(--space-12) 0 var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-border);
+  background: var(--color-blue-50);
+  font-size: var(--text-body-lg);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
+}
+
+.formCard :global(.select):hover:not(:disabled) {
+  border-color: var(--color-blue-300);
+  background: var(--color-white);
+}
+
+.formCard :global(.select):focus-visible {
+  border-color: var(--color-blue-600);
+  background: var(--color-white);
+  box-shadow: 0 0 0 4px rgba(31, 95, 191, 0.12);
+}
+
+.formCard :global(.select):disabled {
+  background: var(--color-off-white);
+}
+
+/* Hint text */
+.formCard :global(.hint) {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* Error text */
+.formCard :global(.errorText) {
+  font-size: var(--text-body-sm);
+  margin-top: var(--space-1);
+}
+
+/* ---- Submit area ---- */
+.submitArea {
+  padding: var(--space-6) var(--space-8) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.submitButton {
+  position: relative;
+}
+
+.submitIcon {
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.submitButton:hover:not(:disabled) .submitIcon {
+  transform: translateX(3px);
+}
+
+.privacyNote {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ---- Form error ---- */
 .formError {
   display: flex;
   align-items: flex-start;
   gap: var(--space-2);
+  margin: var(--space-5) var(--space-8) 0;
   padding: var(--space-3) var(--space-4);
   background: var(--color-error-bg);
   border: var(--border-width) solid var(--color-error);
@@ -91,13 +425,7 @@
   margin-top: var(--space-0-5);
 }
 
-.privacyNote {
-  font-size: var(--text-caption);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-/* Honeypot — removed from the visual and a11y tree; only bots find it. */
+/* ---- Honeypot ---- */
 .honeypot {
   position: absolute;
   left: -9999px;
@@ -107,123 +435,122 @@
   opacity: 0;
 }
 
-/* ------------------------------------------------------------------ *
- * Success state
- * ------------------------------------------------------------------ */
+/* ================================================================== *
+ * Success state                                                       *
+ * ================================================================== */
 .success {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-10) 0;
+  gap: var(--space-5);
+  padding: var(--space-16) var(--space-8);
 }
 
-.successIcon {
+.successIconRing {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   border-radius: var(--radius-full);
-  background: var(--color-success-bg);
-  color: var(--color-success);
-  margin-bottom: var(--space-1);
+  background: linear-gradient(135deg, var(--color-blue-50), var(--color-blue-100));
+  padding: 3px;
+  animation: success-ring-in 0.5s var(--ease-out) both;
+}
+
+.successIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-blue-600);
+  color: var(--color-text-inverse);
+  animation: success-icon-in 0.4s var(--ease-out) 0.15s both;
+}
+
+@keyframes success-ring-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes success-icon-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .successTitle {
-  font-size: var(--text-h3);
-  line-height: var(--text-h3-line);
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  font-weight: var(--weight-bold);
 }
 
 .successBody {
   color: var(--color-text-secondary);
   line-height: var(--text-body-line);
-  max-width: 40ch;
+  max-width: 34ch;
+  font-size: var(--text-body-lg);
 }
 
-/* ------------------------------------------------------------------ *
- * Aside — secondary contact
- * ------------------------------------------------------------------ */
-.aside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+/* ================================================================== *
+ * Responsive (MASTER.md §9)                                          *
+ * ================================================================== */
+@media (max-width: 1023px) {
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .infoPanel {
+    position: static;
+    order: -1;
+  }
+
+  .infoCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-3);
+  }
 }
 
-.asideTitle {
-  font-size: var(--text-h5);
-  font-weight: var(--weight-semibold);
-}
+@media (max-width: 767px) {
+  .heroTitle {
+    max-width: none;
+  }
 
-.asideCard {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  background: var(--color-white);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-}
+  .formHeader,
+  .formBody,
+  .submitArea {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
 
-.asideIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  background: var(--color-blue-100);
-  color: var(--color-blue-700);
-  flex-shrink: 0;
-}
+  .formError {
+    margin-left: var(--space-6);
+    margin-right: var(--space-6);
+  }
 
-.asideText {
-  flex: 1;
-  min-width: 0;
-}
-
-.asideLabel {
-  font-size: var(--text-label);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--text-label-tracking);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.asideValue {
-  display: block;
-  font-weight: var(--weight-semibold);
-  color: var(--color-blue-600);
-  margin-top: var(--space-0-5);
-  overflow-wrap: anywhere;
-}
-
-.asideBody {
-  font-size: var(--text-body-sm);
-  line-height: var(--text-body-sm-line);
-  color: var(--color-text-secondary);
-  margin-top: var(--space-0-5);
-}
-
-.asideNote {
-  font-size: var(--text-caption);
-  color: var(--color-text-muted);
-  margin-top: var(--space-1);
-}
-
-/* ------------------------------------------------------------------ *
- * Responsive (MASTER.md §9) — mobile-first adjustments
- * ------------------------------------------------------------------ */
-@media (max-width: 899px) {
-  .layout {
+  .infoCards {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 639px) {
-  .fieldGrid {
+  .fieldRow {
     grid-template-columns: 1fr;
   }
 }

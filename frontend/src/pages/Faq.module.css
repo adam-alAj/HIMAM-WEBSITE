@@ -31,6 +31,91 @@
   max-width: 52ch;
 }
 
+.count {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Category filter pills
+ * ------------------------------------------------------------------ */
+.filterNav {
+  margin-bottom: var(--space-10);
+}
+
+.filterPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.pill:hover {
+  border-color: var(--color-blue-300);
+  color: var(--color-blue-700);
+}
+
+.pill:focus-visible {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+.pillActive,
+.pillActive:hover {
+  background: var(--color-blue-600);
+  border-color: var(--color-blue-600);
+  color: var(--color-text-on-primary);
+}
+
+.pillActive .pillIcon {
+  color: var(--color-text-on-primary);
+}
+
+.pillIcon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.pillCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-1-5);
+  border-radius: var(--radius-full);
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.pillActive .pillCount {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-on-primary);
+}
+
 /* ------------------------------------------------------------------ *
  * Categories + accordion
  * ------------------------------------------------------------------ */
@@ -44,9 +129,33 @@
   gap: var(--space-4);
 }
 
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.categoryIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-100);
+  color: var(--color-blue-700);
+  flex-shrink: 0;
+}
+
 .categoryTitle {
   font-size: var(--text-h3);
   line-height: var(--text-h3-line);
+}
+
+.categoryCount {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-0-5);
 }
 
 /* ------------------------------------------------------------------ *
@@ -116,4 +225,26 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive (MASTER.md §9) — mobile-first adjustments
+ * ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .filterPills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: var(--space-2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .filterPills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }

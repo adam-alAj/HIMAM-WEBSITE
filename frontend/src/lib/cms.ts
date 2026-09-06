@@ -357,6 +357,8 @@ export interface Testimonial {
   clientRole: string
   quote: string
   photo: MediaFile | null
+  /** Optional larger testimonial image (project screenshot, team photo, etc.). */
+  image: MediaFile | null
   /** Optional star rating, 1–5. */
   rating: number | null
   /** The related Service (populated via `populate=service`), or null. */
@@ -378,12 +380,12 @@ export interface Faq {
 }
 
 /**
- * All published testimonials with their related service, sorted by `order`.
- * Endpoint: GET /api/testimonials?populate=service&sort[0]=order:asc&pagination[pageSize]=100
+ * All published testimonials with their related service and photo, sorted by `order`.
+ * Endpoint: GET /api/testimonials?populate=service&populate=photo&sort[0]=order:asc&pagination[pageSize]=100
  */
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   const params = new URLSearchParams({
-    populate: 'service',
+    populate: ['service', 'photo', 'image'].join(','),
     'sort[0]': 'order:asc',
     'pagination[pageSize]': '100',
   })

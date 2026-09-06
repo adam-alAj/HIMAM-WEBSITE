@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Accordion } from '../components/Accordion/Accordion'
 import { Blocks } from '../components/Blocks/Blocks'
 import { Button } from '../components/Button/Button'
@@ -18,6 +18,14 @@ type FetchState =
 
 /** Display order of categories on the page (matches the CMS enum). */
 const CATEGORY_ORDER: FaqCategory[] = ['Pricing', 'Process', 'Technology', 'Support']
+
+/** Category icon mapping for visual distinction. */
+const CATEGORY_ICONS: Record<FaqCategory, 'search' | 'clock' | 'code' | 'shield'> = {
+  Pricing: 'search',
+  Process: 'clock',
+  Technology: 'code',
+  Support: 'shield',
+}
 
 function FaqSkeleton() {
   return (
@@ -47,6 +55,8 @@ function FaqSkeleton() {
  */
 export default function Faq() {
   const [state, setState] = useState<FetchState>({ status: 'loading' })
+  const [activeCategory, setActiveCategory] = useState<FaqCategory | null>(null)
+  const categoryRefs = useRef<Map<FaqCategory, HTMLDivElement>>(new Map())
 
   const load = useCallback(async () => {
     setState({ status: 'loading' })
@@ -85,6 +95,23 @@ export default function Faq() {
     return map
   }, [state])
 
+  /** Categories that have FAQs. */
+  const availableCategories = useMemo(() => {
+    return CATEGORY_ORDER.filter((cat) => {
+      const faqs = grouped.get(cat)
+      return faqs && faqs.length > 0
+    })
+  }, [grouped])
+
+  /** Scroll to a category section. */
+  const scrollToCategory = (category: FaqCategory) => {
+    setActiveCategory(category)
+    const ref = categoryRefs.current.get(category)
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   /** Strip Strapi blocks to plain text for JSON-LD answer field. */
   const faqJsonLdItems = useMemo(() => {
     if (state.status !== 'ready') return []
@@ -104,6 +131,9 @@ export default function Faq() {
     }))
   }, [state])
 
+  /** Total number of FAQs across all categories. */
+  const totalFaqs = state.status === 'ready' ? state.faqs.length : 0
+
   return (
     <>
       <FAQJsonLd items={faqJsonLdItems} />
@@ -114,22 +144,25 @@ export default function Faq() {
           <h1 className={styles.title}>Questions, answered.</h1>
           <p className={styles.lead}>
             The things buyers ask us before they start — pricing, process, tech stack,
-            and what happens after launch. Can’t find your question? Email us and we’ll
+            and what happens after launch. Can't find your question? Email us and we'll
             answer within one business day.
           </p>
+          {totalFaqs > 0 && (
+            <p className={styles.count}>{totalFaqs} questions across {availableCategories.length} topics</p>
+          )}
         </div>
       </Section>
 
-      {/* Categories */}
+      {/* Category filter + content */}
       <Section background="subtle" padding="lg">
         {state.status === 'loading' && <FaqSkeleton />}
 
         {state.status === 'error' && (
           <div className={styles.statePanel} role="alert">
             <Icon name="alert-triangle" size={24} className={styles.errorIcon} aria-hidden="true" />
-            <h2 className={styles.stateTitle}>Couldn’t load the FAQ</h2>
+            <h2 className={styles.stateTitle}>Couldn't load the FAQ</h2>
             <p className={styles.stateBody}>
-              The content service isn’t responding right now ({state.message}). Please try
+              The content service isn't responding right now ({state.message}). Please try
               again.
             </p>
             <Button onClick={() => void load()}>Try again</Button>
@@ -140,31 +173,95 @@ export default function Faq() {
           <div className={styles.statePanel}>
             <h2 className={styles.stateTitle}>No questions published yet</h2>
             <p className={styles.stateBody}>
-              We’re writing up the answers. Meanwhile, ask us anything directly.
+              We're writing up the answers. Meanwhile, ask us anything directly.
             </p>
             <Button href={`mailto:${siteEmail}`}>Email us</Button>
           </div>
         )}
 
         {state.status === 'ready' && state.faqs.length > 0 && (
-          <div className={styles.categories}>
-            {CATEGORY_ORDER.map((category) => {
-              const faqs = grouped.get(category)
-              if (!faqs || faqs.length === 0) return null
-              return (
-                <div key={category} className={styles.category}>
-                  <h2 className={styles.categoryTitle}>{category}</h2>
-                  <Accordion
-                    items={faqs.map((faq) => ({
-                      id: faq.documentId,
-                      title: faq.question,
-                      content: <Blocks blocks={faq.answer} />,
-                    }))}
-                  />
-                </div>
-              )
-            })}
-          </div>
+          <>
+            {/* Category filter pills */}
+            <nav className={styles.filterNav} aria-label="Filter by category">
+              <div className={styles.filterPills} role="group" aria-label="FAQ categories">
+                <button
+                  type="button"
+                  className={`${styles.pill} ${activeCategory === null ? styles.pillActive : ''}`}
+                  aria-pressed={activeCategory === null}
+                  onClick={() => {
+                    setActiveCategory(null)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                >
+                  All questions
+                  <span className={styles.pillCount}>{totalFaqs}</span>
+                </button>
+                {availableCategories.map((category) => {
+                  const count = grouped.get(category)?.length ?? 0
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      className={`${styles.pill} ${activeCategory === category ? styles.pillActive : ''}`}
+                      aria-pressed={activeCategory === category}
+                      onClick={() => scrollToCategory(category)}
+                    >
+                      <Icon
+                        name={CATEGORY_ICONS[category]}
+                        size={16}
+                        aria-hidden="true"
+                        className={styles.pillIcon}
+                      />
+                      {category}
+                      <span className={styles.pillCount}>{count}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </nav>
+
+            {/* Category sections */}
+            <div className={styles.categories}>
+              {availableCategories
+                .filter((category) => activeCategory === null || activeCategory === category)
+                .map((category) => {
+                  const faqs = grouped.get(category)
+                  if (!faqs || faqs.length === 0) return null
+                  return (
+                    <div
+                      key={category}
+                      ref={(el) => {
+                        if (el) categoryRefs.current.set(category, el)
+                      }}
+                      className={styles.category}
+                    >
+                      <div className={styles.categoryHeader}>
+                        <span className={styles.categoryIcon}>
+                          <Icon
+                            name={CATEGORY_ICONS[category]}
+                            size={20}
+                            aria-hidden="true"
+                          />
+                        </span>
+                        <div>
+                          <h2 className={styles.categoryTitle}>{category}</h2>
+                          <p className={styles.categoryCount}>
+                            {faqs.length} {faqs.length === 1 ? 'question' : 'questions'}
+                          </p>
+                        </div>
+                      </div>
+                      <Accordion
+                        items={faqs.map((faq) => ({
+                          id: faq.documentId,
+                          title: faq.question,
+                          content: <Blocks blocks={faq.answer} />,
+                        }))}
+                      />
+                    </div>
+                  )
+                })}
+            </div>
+          </>
         )}
       </Section>
 
@@ -173,8 +270,8 @@ export default function Faq() {
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>Still have questions?</h2>
           <p className={styles.ctaLead}>
-            Ask us directly — we’ll give you a straight answer, even if it’s “that’s not
-            what we do”.
+            Ask us directly — we'll give you a straight answer, even if it's "that's not
+            what we do".
           </p>
           <div className={styles.ctaActions}>
             <Button size="lg" to="/contact">

@@ -66,6 +66,7 @@ const SERVICE_ICON_NAMES = [
   'send',
   'mail',
   'map-pin',
+  'smartphone',
 ] as const;
 
 type ServiceIconName = (typeof SERVICE_ICON_NAMES)[number];

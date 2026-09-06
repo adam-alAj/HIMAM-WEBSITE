@@ -121,6 +121,21 @@
   background: var(--color-error-active);
 }
 
+.light {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border-color: var(--color-border-on-dark);
+}
+
+.light:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-text-inverse);
+}
+
+.light:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
 /* ------------------------------------------------------------------ *
  * States
  * ------------------------------------------------------------------ */

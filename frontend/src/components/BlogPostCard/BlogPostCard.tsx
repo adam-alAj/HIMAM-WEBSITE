@@ -1,8 +1,8 @@
 import { AuthorByline } from '../AuthorByline/AuthorByline'
 import { Badge } from '../Badge/Badge'
 import { Card } from '../Card/Card'
+import { Icon } from '../Icon/Icon'
 import { resolveMediaUrl, type BlogPost } from '../../lib/cms'
-import { readingTime } from '../../lib/format'
 import styles from './BlogPostCard.module.css'
 
 /**
@@ -13,14 +13,20 @@ export function BlogPostCard({ post }: { post: BlogPost }) {
   const coverUrl = resolveMediaUrl(post.coverImage?.url)
 
   return (
-    <Card to={`/blog/${post.slug}`} interactive padding="none" className={styles.card}>
+    <Card to={`/blog/${post.slug}`} padding="none" className={styles.card}>
       {coverUrl ? (
-        <img
-          className={styles.cover}
-          src={coverUrl}
-          alt={post.coverImage?.alternativeText ?? post.title}
-          loading="lazy"
-        />
+        <div className={styles.media}>
+          <img
+            className={styles.cover}
+            src={coverUrl}
+            alt={post.coverImage?.alternativeText ?? post.title}
+            loading="lazy"
+          />
+          <span className={styles.mediaShade} aria-hidden="true" />
+          <span className={styles.mediaAction} aria-hidden="true">
+            <Icon name="arrow-right" size={16} />
+          </span>
+        </div>
       ) : (
         <span className={styles.coverPlaceholder} aria-hidden="true">
           {post.category}
@@ -36,7 +42,7 @@ export function BlogPostCard({ post }: { post: BlogPost }) {
         <h3 className={styles.title}>{post.title}</h3>
         <p className={styles.excerpt}>{post.excerpt}</p>
         <div className={styles.byline}>
-          <AuthorByline author={post.author} date={post.publishedAt} readingTime={readingTime(post.body)} />
+          <AuthorByline author={post.author} date={post.publishedAt} />
         </div>
       </div>
     </Card>

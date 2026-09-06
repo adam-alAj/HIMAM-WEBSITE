@@ -94,16 +94,17 @@ export default function Blog() {
       <Section background="default" padding="lg">
         <div className={styles.hero}>
           <p className={styles.eyebrow}>Blog</p>
-          <h1 className={styles.title}>Notes from the studio.</h1>
+          <h1 className={styles.title}>Blogs & News</h1>
           <p className={styles.lead}>
-            How we think about AI, systems, and running a small engineering team —
-            written by the people who do the work.
+            Real-world takes on AI, resilient systems, and high-velocity
+            engineering written directly by the team building the product. No fluff,
+            no ghostwriters, just practical notes from the trenches.
           </p>
         </div>
       </Section>
 
       {/* Filter + grid */}
-      <Section background="subtle" padding="lg">
+      <Section background="subtle" padding="lg" className={styles.filterSection}>
         <h2 className="sr-only">All posts</h2>
         <div className={styles.tabs} role="group" aria-label="Filter posts by category">
           <button
@@ -112,6 +113,7 @@ export default function Blog() {
             aria-pressed={category === null}
             onClick={() => selectCategory(null)}
           >
+            {category === null && <Icon name="check" size={14} aria-hidden="true" />}
             All
           </button>
           {BLOG_CATEGORIES.map((tab) => (
@@ -122,6 +124,7 @@ export default function Blog() {
               aria-pressed={category === tab}
               onClick={() => selectCategory(tab)}
             >
+              {category === tab && <Icon name="check" size={14} aria-hidden="true" />}
               {tab}
             </button>
           ))}
@@ -206,7 +209,7 @@ export default function Blog() {
             <Button size="lg" variant="secondary" to="/testimonials">
               Read what clients say
             </Button>
-            <Button size="lg" variant="ghost" href={`mailto:${siteEmail}`}>
+            <Button size="lg" variant="light" href={`mailto:${siteEmail}`}>
               Email us
             </Button>
           </div>

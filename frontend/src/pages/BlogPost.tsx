@@ -16,7 +16,6 @@ import {
   resolveMediaUrl,
   type BlogPost as BlogPostType,
 } from '../lib/cms'
-import { readingTime } from '../lib/format'
 import { setPageMeta } from '../lib/seo'
 import { siteEmail } from '../lib/site'
 import styles from './BlogPost.module.css'
@@ -37,7 +36,7 @@ function pickRelated(posts: BlogPostType[], current: BlogPostType): BlogPostType
 function PostSkeleton() {
   return (
     <>
-      <Section background="default" padding="lg">
+      <Section background="default" padding="lg" className={styles.heroSection}>
         <div className={styles.hero} aria-hidden="true">
           <Skeleton width={120} height={16} radius="sm" />
           <Skeleton width="70%" height={40} radius="sm" />
@@ -45,7 +44,7 @@ function PostSkeleton() {
           <Skeleton width="100%" height={300} radius="lg" />
         </div>
       </Section>
-      <Section background="subtle" padding="lg" container="narrow">
+      <Section background="subtle" padding="lg" className={styles.bodySection}>
         <div className={styles.bodySkeleton} aria-hidden="true">
           <Skeleton width="100%" height={16} />
           <Skeleton width="100%" height={16} />
@@ -142,7 +141,6 @@ export default function BlogPost() {
 
   const post = state.post
   const coverUrl = resolveMediaUrl(post.coverImage?.url)
-  const minutes = readingTime(post.body)
 
   return (
     <>
@@ -155,7 +153,7 @@ export default function BlogPost() {
         datePublished={post.publishedAt}
       />
       {/* Hero — title, byline, cover */}
-      <Section background="default" padding="lg">
+      <Section background="default" padding="lg" className={styles.heroSection}>
         <Link to="/blog" className={styles.back}>
           <Icon name="chevron-left" size={16} aria-hidden="true" />
           All posts
@@ -168,7 +166,6 @@ export default function BlogPost() {
           <AuthorByline
             author={post.author}
             date={post.publishedAt}
-            readingTime={minutes}
             link="/about"
             className={styles.byline}
           />
@@ -182,22 +179,24 @@ export default function BlogPost() {
         </article>
       </Section>
 
-      {/* Body + author card */}
-      <Section background="subtle" padding="lg" container="narrow">
-        <Blocks blocks={post.body} />
+      {/* Article body + author panel */}
+      <Section background="subtle" padding="lg" className={styles.bodySection}>
+        <Card padding="lg" className={styles.articleCard}>
+          <div className={styles.articleColumn}>
+            <Blocks blocks={post.body} />
 
-        {post.author && (
-          <Card variant="subtle" padding="lg" className={styles.authorCard}>
-            <div className={styles.authorCardBody}>
-              <AuthorByline author={post.author} link="/about" />
-              <p className={styles.authorRole}>{post.author.role}</p>
-              <Link to="/about" className={styles.aboutLink}>
-                Meet the team
-                <Icon name="arrow-right" size={16} aria-hidden="true" />
-              </Link>
-            </div>
-          </Card>
-        )}
+            {post.author && (
+              <footer className={styles.author}>
+                <AuthorByline author={post.author} link="/about" />
+                <p className={styles.authorRole}>{post.author.role}</p>
+                <Link to="/about" className={styles.aboutLink}>
+                  Meet the team
+                  <Icon name="arrow-right" size={16} aria-hidden="true" />
+                </Link>
+              </footer>
+            )}
+          </div>
+        </Card>
       </Section>
 
       {/* Related posts */}
@@ -231,7 +230,7 @@ export default function BlogPost() {
             <Button size="lg" variant="secondary" to="/testimonials">
               Read what clients say
             </Button>
-            <Button size="lg" variant="ghost" href={`mailto:${siteEmail}`}>
+            <Button size="lg" variant="light" href={`mailto:${siteEmail}`}>
               Email us
             </Button>
           </div>

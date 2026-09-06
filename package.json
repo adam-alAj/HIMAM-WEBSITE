@@ -13,5 +13,8 @@
     "test:frontend": "npm --prefix frontend test",
     "test:api": "npm --prefix cms run test:api",
     "e2e": "npm --prefix frontend run e2e"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
   }
 }

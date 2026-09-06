@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Badge } from '../components/Badge/Badge'
 import { Blocks } from '../components/Blocks/Blocks'
 import { Button } from '../components/Button/Button'
-import { Icon, type IconName } from '../components/Icon/Icon'
-import { iconPaths } from '../components/Icon/icons'
+import { Icon } from '../components/Icon/Icon'
 import { ServiceJsonLd } from '../components/JsonLd/JsonLd'
 import { Section } from '../components/Section/Section'
 import { Skeleton } from '../components/Skeleton/Skeleton'
@@ -17,10 +15,6 @@ type DetailState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'ready'; service: Service | null }
-
-function isIconName(name: string): name is IconName {
-  return name in iconPaths
-}
 
 function DetailSkeleton() {
   return (
@@ -123,8 +117,6 @@ export default function ServiceDetail() {
   }
 
   const service = state.service
-  const icon: IconName = isIconName(service.icon) ? service.icon : 'layers'
-
   return (
     <>
       <ServiceJsonLd
@@ -139,30 +131,33 @@ export default function ServiceDetail() {
           All services
         </Link>
         <div className={styles.hero}>
-          <div className={styles.heroMeta}>
-            <span className={styles.iconTile}>
-              <Icon name={icon} size={24} aria-hidden="true" />
-            </span>
-            {service.startingFrom && <Badge variant="light">{service.startingFrom}</Badge>}
-          </div>
           <h1 className={styles.title}>{service.title}</h1>
           <p className={styles.lead}>{service.shortDescription}</p>
         </div>
       </Section>
 
       {/* Body */}
-      <Section background="subtle" padding="lg" container="narrow">
-        <Blocks blocks={service.longDescription} />
+      <Section background="subtle" padding="lg" container="wide">
+        <div className={styles.bodySection}>
+          <div className={styles.bodyCard}>
+            <h2 className={styles.cardHeading}>Overview</h2>
+            <div className={styles.cardBody}>
+              <Blocks blocks={service.longDescription} />
+            </div>
+          </div>
 
-        <h2 className={styles.checklistTitle}>Key features</h2>
-        <ul className={styles.checklist}>
-          {service.features.map((feature) => (
-            <li key={feature.id}>
-              <Icon name="check" size={16} aria-hidden="true" />
-              <span>{feature.text}</span>
-            </li>
-          ))}
-        </ul>
+          <div className={styles.bodyCard}>
+            <h2 className={styles.cardHeading}>Key features</h2>
+            <ul className={styles.checklist}>
+              {service.features.map((feature) => (
+                <li key={feature.id}>
+                  <Icon name="check" size={16} aria-hidden="true" />
+                  <span>{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </Section>
 
       {/* CTA */}

@@ -460,6 +460,7 @@ export interface ApiAccomplishmentAccomplishment
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    gallery: Schema.Attribute.Media<'images', true>;
     industry: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

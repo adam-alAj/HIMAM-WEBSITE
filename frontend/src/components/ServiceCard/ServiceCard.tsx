@@ -1,4 +1,3 @@
-import { Badge } from '../Badge/Badge'
 import { Button } from '../Button/Button'
 import { Card } from '../Card/Card'
 import { Icon, type IconName } from '../Icon/Icon'
@@ -22,7 +21,7 @@ export function ServiceCard({ service }: { service: Service }) {
   return (
     <Card padding="lg" className={styles.card}>
       <span className={styles.iconTile}>
-        <Icon name={icon} size={24} aria-hidden="true" />
+        <Icon name={icon} size={32} aria-hidden="true" />
       </span>
 
       <h3 className={styles.title}>{service.title}</h3>
@@ -38,20 +37,10 @@ export function ServiceCard({ service }: { service: Service }) {
       </ul>
 
       <div className={styles.footer}>
-        {service.startingFrom ? (
-          <Badge variant="light">{service.startingFrom}</Badge>
-        ) : (
-          <span aria-hidden="true" />
-        )}
-        <div className={styles.actions}>
-          <Button variant="ghost" size="sm" to={`/services/${service.slug}`}>
-            Learn more
-            <Icon name="arrow-right" size={16} aria-hidden="true" />
-          </Button>
-          <Button variant="secondary" size="sm" to="/contact">
-            Start a project
-          </Button>
-        </div>
+        <Button variant="secondary" fullWidth to={`/services/${service.slug}`}>
+          Learn more
+          <Icon name="arrow-right" size={16} aria-hidden="true" />
+        </Button>
       </div>
     </Card>
   )

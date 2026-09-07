@@ -61,6 +61,13 @@
       "type": "integer",
       "required": false,
       "description": "Manual sort order on the Accomplishments page (ascending)."
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional project photo gallery shown in the case study card."
     }
   }
 }

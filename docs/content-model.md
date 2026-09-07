@@ -116,6 +116,7 @@ Seed: four fictional-but-plausible case studies, published on first boot.
 | problem      | blocks | required                                       |
 | solution     | blocks | required                                       |
 | outcome      | blocks | required — specific numbers over vague claims  |
+| gallery      | media   | optional, multiple, images only — project photo gallery |
 | order        | integer | manual sort on Accomplishments page (ascending) |
 
 API: `GET /api/accomplishments?sort[0]=order:asc`.

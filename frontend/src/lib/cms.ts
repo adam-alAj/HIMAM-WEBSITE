@@ -296,6 +296,8 @@ export interface Accomplishment {
   problem: Blocks
   solution: Blocks
   outcome: Blocks
+  /** Optional project photo gallery (populated via `populate=gallery`). */
+  gallery: MediaFile[] | null
   order: number | null
   publishedAt: string
 }
@@ -311,10 +313,11 @@ export interface Metric {
 
 /**
  * All published case studies, sorted by the CMS `order` field.
- * Endpoint: GET /api/accomplishments?sort[0]=order:asc&pagination[pageSize]=100
+ * Endpoint: GET /api/accomplishments?populate=gallery&sort[0]=order:asc&pagination[pageSize]=100
  */
 export async function fetchAccomplishments(): Promise<Accomplishment[]> {
   const params = new URLSearchParams({
+    populate: 'gallery',
     'sort[0]': 'order:asc',
     'pagination[pageSize]': '100',
   })

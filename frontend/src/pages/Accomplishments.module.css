@@ -11,17 +11,30 @@
   gap: var(--space-4);
 }
 
+.heroEyebrow {
+  margin-bottom: var(--space-1);
+}
+
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: var(--text-label);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--text-label-tracking);
   text-transform: uppercase;
   color: var(--color-blue-600);
+  background: var(--color-blue-50);
+  padding: var(--space-1-5) var(--space-4);
+  border-radius: var(--radius-full);
 }
 
 .eyebrowNavy {
-  color: var(--color-blue-300);
+  color: var(--color-text-inverse);
+  background: var(--color-blue-950);
+  border: var(--border-width) solid var(--color-border-on-dark);
   margin-bottom: var(--space-6);
+  font-family: var(--font-sans);
 }
 
 .title {
@@ -73,11 +86,11 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Section headers + case study grid
+ * Section headers + case study rows
  * ------------------------------------------------------------------ */
 .sectionHead {
   max-width: 44rem;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-10);
 }
 
 .sectionTitle {
@@ -94,23 +107,186 @@
   max-width: 48ch;
 }
 
-.caseGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--space-6);
-}
-
-.caseCard {
+/* Case study rows — full-width stack, one section per accomplishment */
+.caseRows {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.caseRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  padding: var(--space-6) 0;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.caseRow:first-child {
+  border-top: 0;
+}
+
+/* Gallery — image stage + thumbnail tabs (top half of the row) */
+.caseGallery {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
+}
+
+.imageStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-blue-950);
+  border: var(--border-width) solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.stageImage {
+  width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+.stageImageHidden {
+  opacity: 0;
+}
+
+.stageFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-inverse-muted);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* Slide controls — prev/next arrows overlaid on the stage */
+.slideControls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  pointer-events: none;
+}
+
+.slideArrow {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 27, 58, 0.55);
+  color: var(--color-text-inverse);
+  border: var(--border-width) solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+  backdrop-filter: blur(4px);
+}
+
+.slideArrow:hover:not(:disabled) {
+  background: rgba(8, 27, 58, 0.8);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-white);
+}
+
+.slideArrow:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.slideArrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.slideArrow:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+}
+
+/* Thumbnail tabs — act as tabs + pagination for the gallery */
+.thumbnails {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-white);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.thumb:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+.thumbActive {
+  border-color: var(--color-blue-600);
+  border-width: var(--border-width-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.thumbActive:hover {
+  border-color: var(--color-blue-700);
+}
+
+.thumbImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+}
+
+/* Info — under the gallery (bottom half of the row) */
+.caseInfo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
 }
 
 .caseTitle {
-  font-size: var(--text-h5);
+  font-size: var(--text-h3);
   font-weight: var(--weight-semibold);
+  line-height: var(--text-h3-line);
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
 .caseMeta {
@@ -138,7 +314,7 @@
   font-weight: var(--weight-semibold);
   font-size: var(--text-body-sm);
   line-height: var(--text-body-sm-line);
-  margin-top: var(--space-1);
+  margin: 0;
 }
 
 .caseMetric svg {
@@ -146,8 +322,17 @@
   color: var(--color-blue-600);
 }
 
+.caseBlocks {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .caseBlock {
   width: 100%;
+}
+
+.caseBlock > p:first-child {
+  margin: 0 0 var(--space-2);
 }
 
 .caseLabel {
@@ -156,21 +341,37 @@
   letter-spacing: var(--text-label-tracking);
   text-transform: uppercase;
   color: var(--color-blue-600);
-  margin-bottom: var(--space-2);
+  margin: 0;
 }
 
 /* ------------------------------------------------------------------ *
  * Skeleton + states
  * ------------------------------------------------------------------ */
-.skeletonCard {
+.caseSkeletons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.caseSkeleton {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.thumbSkeleton {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.infoSkeleton {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-8);
+  padding: var(--space-6);
   background: var(--color-white);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
 }
 
 .statePanel {
@@ -234,8 +435,55 @@
 /* ------------------------------------------------------------------ *
  * Responsive (MASTER.md §9) — mobile-first adjustments
  * ------------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .caseRow {
+    grid-template-columns: 1fr;
+  }
+
+  .caseInfo {
+    padding: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .caseRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: stretch;
+  }
+
+  .caseGallery {
+    min-height: 0;
+  }
+
+  .imageStage {
+    aspect-ratio: auto;
+    min-height: 280px;
+  }
+
+  .caseInfo {
+    padding: var(--space-8);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    border-left: 0;
+    border-top: 0;
+  }
+
+  .thumbnails {
+    padding-left: var(--space-6);
+  }
+}
+
 @media (max-width: 767px) {
   .metricsGrid {
     gap: var(--space-6);
+  }
+
+  .caseInfo {
+    padding: var(--space-5);
+  }
+
+  .thumb {
+    width: 56px;
+    height: 56px;
   }
 }

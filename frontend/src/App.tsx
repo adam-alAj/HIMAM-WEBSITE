@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { ScrollToTop } from './components/ScrollToTop/ScrollToTop'
 import { SiteLayout } from './layouts/SiteLayout'
 import About from './pages/About'
 import Accomplishments from './pages/Accomplishments'
@@ -22,6 +23,7 @@ import Testimonials from './pages/Testimonials'
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Home />} />

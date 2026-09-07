@@ -25,24 +25,6 @@
   gap: var(--space-4);
 }
 
-.heroMeta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-1);
-}
-
-.iconTile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: var(--color-blue-100);
-  color: var(--color-blue-700);
-}
-
 .title {
   font-size: var(--text-h1);
   line-height: var(--text-h1-line);
@@ -56,17 +38,44 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Body — rich text + key features checklist
+ * Body — card sections
  * ------------------------------------------------------------------ */
-.checklistTitle {
+.bodySection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .bodySection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bodyCard {
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeading {
   font-size: var(--text-h3);
   line-height: var(--text-h3-line);
-  margin-top: var(--space-12);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.cardBody {
+  color: var(--color-text-secondary);
+  line-height: var(--text-body-line);
 }
 
 .checklist {
   list-style: none;
-  margin: var(--space-4) 0 0;
+  margin: 0;
   padding: 0;
   display: grid;
   gap: var(--space-3);
@@ -81,9 +90,9 @@
 }
 
 .checklist svg {
-  color: var(--color-blue-600);
+  color: var(--color-blue-500);
   flex-shrink: 0;
-  margin-top: var(--space-1);
+  margin-top: 2px;
 }
 
 /* ------------------------------------------------------------------ *

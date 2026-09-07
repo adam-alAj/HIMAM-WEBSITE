@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Icon } from '../Icon/Icon'
 import styles from './Button.module.css'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'light'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonBaseProps {

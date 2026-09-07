@@ -33,28 +33,10 @@
       "description": "Full service copy, rendered in the expandable detail on the Services page."
     },
     "icon": {
-      "type": "enumeration",
-      "enum": [
-        "monitor",
-        "phone",
-        "database",
-        "bot",
-        "code",
-        "layers",
-        "shield",
-        "globe",
-        "users",
-        "message-square",
-        "search",
-        "calendar",
-        "clock",
-        "send",
-        "mail",
-        "map-pin"
-      ],
+      "type": "string",
       "required": true,
       "default": "layers",
-      "description": "Icon reference — must match the frontend Icon component's icon names."
+      "description": "Icon name — must match a key in the frontend Icon component (frontend/src/components/Icon/icons.tsx). Any string is accepted; unknown names fall back to 'layers' at render time."
     },
     "features": {
       "type": "component",

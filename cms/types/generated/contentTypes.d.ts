@@ -714,26 +714,7 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
         },
         number
       >;
-    icon: Schema.Attribute.Enumeration<
-      [
-        'monitor',
-        'phone',
-        'database',
-        'bot',
-        'code',
-        'layers',
-        'shield',
-        'globe',
-        'users',
-        'message-square',
-        'search',
-        'calendar',
-        'clock',
-        'send',
-        'mail',
-        'map-pin',
-      ]
-    > &
+    icon: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'layers'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -863,26 +844,7 @@ export interface ApiValueValue extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    icon: Schema.Attribute.Enumeration<
-      [
-        'monitor',
-        'phone',
-        'database',
-        'bot',
-        'code',
-        'layers',
-        'shield',
-        'globe',
-        'users',
-        'message-square',
-        'search',
-        'calendar',
-        'clock',
-        'send',
-        'mail',
-        'map-pin',
-      ]
-    > &
+    icon: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'layers'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

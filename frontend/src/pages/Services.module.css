@@ -34,6 +34,7 @@
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg-line);
   color: var(--color-text-secondary);
+  max-width: 50%;
 }
 
 /* ------------------------------------------------------------------ *

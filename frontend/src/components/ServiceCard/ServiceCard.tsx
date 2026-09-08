@@ -1,5 +1,5 @@
+import { useState, useCallback } from 'react'
 import { Button } from '../Button/Button'
-import { Card } from '../Card/Card'
 import { Icon, type IconName } from '../Icon/Icon'
 import { iconPaths } from '../Icon/icons'
 import type { Service } from '../../lib/cms'
@@ -14,34 +14,66 @@ function isIconName(name: string): name is IconName {
  * One service in the Services grid. Renders CMS content (title, teaser,
  * features, optional "starting from" price) with a detail link and a
  * contact CTA — built on the Phase 2 Card (MASTER.md §16).
+ *
+ * Click anywhere on the card to flip and reveal the description.
  */
 export function ServiceCard({ service }: { service: Service }) {
   const icon: IconName = isIconName(service.icon) ? service.icon : 'layers'
+  const [flipped, setFlipped] = useState(false)
+
+  const flip = useCallback(() => setFlipped((f) => !f), [])
 
   return (
-    <Card padding="lg" className={styles.card}>
-      <span className={styles.iconTile}>
-        <Icon name={icon} size={32} aria-hidden="true" />
-      </span>
+    <div className={styles.flipContainer}>
+      <div className={`${styles.flipper} ${flipped ? styles.flipped : ''}`}>
+        {/* ── Front face ── */}
+        <div className={`${styles.face} ${styles.front}`} onClick={flip}>
+          <span className={styles.iconTile}>
+            <Icon name={icon} size={32} className={styles.icon} aria-hidden="true" />
+          </span>
 
-      <h3 className={styles.title}>{service.title}</h3>
-      <p className={styles.body}>{service.shortDescription}</p>
+          <h3 className={styles.title}>{service.title}</h3>
+          <span className={styles.divider} aria-hidden="true" />
 
-      <ul className={styles.features}>
-        {service.features.map((feature) => (
-          <li key={feature.id} className={styles.feature}>
-            <Icon name="check" size={14} aria-hidden="true" />
-            <span>{feature.text}</span>
-          </li>
-        ))}
-      </ul>
+          <ul className={styles.features}>
+            {service.features.map((feature) => (
+              <li key={feature.id} className={styles.feature}>
+                <Icon name="check" size={14} aria-hidden="true" />
+                <span>{feature.text}</span>
+              </li>
+            ))}
+          </ul>
 
-      <div className={styles.footer}>
-        <Button variant="secondary" fullWidth to={`/services/${service.slug}`}>
-          Learn more
-          <Icon name="arrow-right" size={16} aria-hidden="true" />
-        </Button>
+          <div className={styles.footer} onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="secondary"
+              fullWidth
+              to={`/services/${service.slug}`}
+            >
+              Learn more
+              <Icon name="arrow-right" size={16} aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+
+        {/* ── Back face ── */}
+        <div className={`${styles.face} ${styles.back}`} onClick={flip}>
+          <h3 className={styles.title}>{service.title}</h3>
+          <span className={styles.divider} aria-hidden="true" />
+          <p className={styles.backBody}>{service.shortDescription}</p>
+
+          <div className={styles.footer} onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="secondary"
+              fullWidth
+              to={`/services/${service.slug}`}
+            >
+              Learn more
+              <Icon name="arrow-right" size={16} aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
       </div>
-    </Card>
+    </div>
   )
 }

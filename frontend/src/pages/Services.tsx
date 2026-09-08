@@ -70,16 +70,10 @@ export default function Services() {
       <Section background="default" padding="lg">
         <div className={styles.hero}>
           <p className={styles.eyebrow}>Services</p>
-          <h1 className={styles.title}>What service do we offer?</h1>
+          <h1 className={styles.title}>Service we offer</h1>
           <p className={styles.lead}>
-            We offer a comprehensive suite of digital services designed to transform
-            your ideas into robust, scalable solutions. From custom software development
-            and modern web experiences to intelligent automation and strategic consulting,
-            each service is delivered by a senior team of engineers who manage every
-            phase of the project — from initial discovery and architecture through
-            development, testing, and deployment. Whether you need a standalone product
-            or an integrated platform, our services can be tailored and combined to
-            meet the unique demands of your business.
+            End-to-end digital services — from discovery and architecture to deployment.
+            We turn your ideas into scalable, production-ready solutions.
           </p>
         </div>
       </Section>

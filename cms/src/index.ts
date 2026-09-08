@@ -1,5 +1,5 @@
 import type { Core } from '@strapi/strapi';
-import { ensurePublicRead, seedAll } from './seed';
+import { ensurePublicRead, seedAll } from './seed/index.js';
 
 export default {
   /**
